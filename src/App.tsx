@@ -1,9 +1,15 @@
 import './App.css'
+import { mdiHammer, mdiSourceBranch, mdiSourceBranchSync } from '@mdi/js'
+import Icon from '@mdi/react'
+import { useState } from 'react'
+import VersionPane from './Components/VersionPane'
 
 function App() {
+    const [changeVersion, toggleChangeVersion] = useState(false)
+
     const Info = (props: {
         app: string
-        branch: string
+        version: string
         lastBuild: string
         status: "actualizada" | "desactualizada"
     }) =>
@@ -12,7 +18,7 @@ function App() {
                 App: {props.app}
             </p>
             <p className="text-gray-700 font-bold">
-                branch: {props.branch}
+                Versión: {props.version}
             </p>
             <p className="text-gray-700 font-bold">
                 Último build: {props.lastBuild}
@@ -23,13 +29,30 @@ function App() {
         </div>
 
     const Actions = () =>
-        <div className='grid grid-cols-2'>
+        <div className='grid grid-cols-4'>
+            <div className='flex'>
+                <Icon path={mdiHammer} size={1} />
+                Build y deploy
+            </div>
+            <div className='flex' onClick={() => toggleChangeVersion(!changeVersion)}>
+                <Icon path={mdiSourceBranch} size={1} />
+                Cambiar de versión
+            </div>
         </div>
 
     return (
-        <div className='grid grid-rows-2 gap-5'>
-            <Info app="test" branch='dev' lastBuild='14/12' status='desactualizada' />
-            <Info app='cloud' branch='master' lastBuild='23/11' status='actualizada' />
+        <div>
+            {changeVersion ? <VersionPane/> : null}
+            <div className='grid grid-rows-2 gap-5'>
+                <div>
+                    <Info app="test" version='3.6' lastBuild='14/12' status='desactualizada' />
+                    <Actions />
+                </div>
+                <div>
+                    <Info app="cloud" version='2.0' lastBuild='23/11' status='actualizada' />
+                    <Actions />
+                </div>
+            </div>
         </div>
     )
 }
