@@ -1,4 +1,4 @@
-import React, { createContext } from "react"
+import { createContext } from "react"
 
 export const initUpdateVersionState = {
     currentVersion: "",
@@ -6,19 +6,30 @@ export const initUpdateVersionState = {
     app: ""
 }
 
-export type UpdateVersionAction<T extends keyof typeof initUpdateVersionState | "set"> = {
-    valueToUpdate: T
-    payload: T extends "set" ? {
-        currentVersion: string
-        app: string
-    } : string
+export type UpdateVersionAction = {
+    valueToUpdate: keyof typeof initUpdateVersionState
+    payload: string
+} | {
+    valueToUpdate: "set"
+    payload: Omit<typeof initUpdateVersionState, "targetVersion">
 }
 
 export type UpdateVersionContext = typeof initUpdateVersionState & {
-    dispatch: <T extends keyof typeof initUpdateVersionState | "set">(value: UpdateVersionAction<T>) => void
+    dispatch: (value: UpdateVersionAction) => void
 }
 
 export const UpdateVersionContext = createContext<UpdateVersionContext>({
     ...initUpdateVersionState,
     dispatch: () => { }
 })
+
+export const reducer = (state: typeof initUpdateVersionState, action: UpdateVersionAction): typeof initUpdateVersionState => {
+    if (action.valueToUpdate === "set") return {
+        ...state,
+        ...action.payload
+    }
+    return {
+        ...state,
+        [action.valueToUpdate]: action.payload
+    }
+}

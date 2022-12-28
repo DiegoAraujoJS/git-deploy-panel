@@ -3,14 +3,8 @@ import { mdiHammer, mdiSourceBranch } from '@mdi/js'
 import Icon from '@mdi/react'
 import { useReducer } from 'react'
 import VersionPane from './Components/VersionPane'
-import { initUpdateVersionState, UpdateVersionAction, UpdateVersionContext } from './Context/UpdateVersionContext'
+import { initUpdateVersionState, reducer, UpdateVersionContext } from './Context/UpdateVersionContext'
 
-const reducer = <T extends keyof typeof initUpdateVersionState | "set">(state: typeof initUpdateVersionState, action: UpdateVersionAction<T>) => {
-    return {
-        ...state,
-        [action.valueToUpdate]: action.payload
-    }
-}
 
 function App() {
     const [state, dispatch] = useReducer(reducer, initUpdateVersionState)

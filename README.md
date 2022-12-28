@@ -1,5 +1,4 @@
 ## Registro del funcionamiento del deploy.
-
 Vamos a contruir un protocolo reforzado con código que va a resultar en el deploy de la aplicación a nuestros servidores. Al final, vamos a tener un workflow para ir paso a paso del código que estamos escribiendo a la aplicación levantada en IIS.
 
 1. Primero hacemos el commit que queremos deployar sobre cualquier branch. A continuación tageamos el commit.
@@ -14,6 +13,5 @@ Vamos a contruir un protocolo reforzado con código que va a resultar en el depl
 3. Elegimos la versión "target" a la cual queremos actualizar la aplicación y le damos a Build y Deploy. Esto va a iniciar un procedimiento automático que terminará con el deploy de la aplicación a IIS.
 
 #### Algunas consideraciones.
-
 * Este procedimiento no modifica nunca el árbol de git. Lo único que hace es actualizar el código a un commit del árbol u otro. Nunca se hace un merge.
-* La aplicación puede saltar de un estado a cualquier otro. "Cloud" no necesariamente tiene que estar sobre la rama master por este motivo.
+* La aplicación **puede saltar de un commit a cualquier otro** mientras haya un tag. *Cloud* no necesariamente tiene que estar sobre la rama master por este motivo.

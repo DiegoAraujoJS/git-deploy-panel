@@ -1,7 +1,11 @@
+import { useContext } from "react"
+import { UpdateVersionContext } from "../Context/UpdateVersionContext"
+
 export default (props: {
     currentVersion: string
     versions: string[]
 }) => {
+    const { app, currentVersion, targetVersion, dispatch } = useContext(UpdateVersionContext)
     return (
         <div className="grid grid-cols-2 divide-x-4 float-left max-w-sm">
             <div>
