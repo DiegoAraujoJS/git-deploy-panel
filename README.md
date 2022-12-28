@@ -12,3 +12,8 @@ Vamos a contruir un protocolo reforzado con código que va a resultar en el depl
     > También podemos hacer un script que haga esto automáticamente (ya que la numeración del tag no es arbitraria y está completamente determinada por la numeración anterior).
 2. Despues de tagearlo, le damos a "actualizar aplicación" en el panel. El commit tageado va a aparecer en el dropdown. Podemos elegir cualquier tag para actualizar la aplicación.
 3. Elegimos la versión "target" a la cual queremos actualizar la aplicación y le damos a Build y Deploy. Esto va a iniciar un procedimiento automático que terminará con el deploy de la aplicación a IIS.
+
+#### Algunas consideraciones.
+
+* Este procedimiento no modifica nunca el árbol de git. Lo único que hace es actualizar el código a un commit del árbol u otro. Nunca se hace un merge.
+* La aplicación puede saltar de un estado a cualquier otro. "Cloud" no necesariamente tiene que estar sobre la rama master por este motivo.
