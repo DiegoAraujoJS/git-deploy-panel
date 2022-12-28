@@ -8,10 +8,10 @@ export const initUpdateVersionState = {
 
 export type UpdateVersionAction = {
     valueToUpdate: keyof typeof initUpdateVersionState
-    payload: string
-} | {
-    valueToUpdate: "set"
-    payload: Omit<typeof initUpdateVersionState, "targetVersion">
+    payload: {
+        value: string
+        app: string
+    }
 }
 
 export type UpdateVersionContext = typeof initUpdateVersionState & {
@@ -24,12 +24,10 @@ export const UpdateVersionContext = createContext<UpdateVersionContext>({
 })
 
 export const reducer = (state: typeof initUpdateVersionState, action: UpdateVersionAction): typeof initUpdateVersionState => {
-    if (action.valueToUpdate === "set") return {
-        ...state,
-        ...action.payload
-    }
+    if (state.app === action.payload.app) return initUpdateVersionState
     return {
         ...state,
-        [action.valueToUpdate]: action.payload
+        app: action.payload.app,
+        [action.valueToUpdate]: action.payload.value
     }
 }
