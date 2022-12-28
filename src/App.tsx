@@ -1,11 +1,12 @@
 import './App.css'
-import { mdiHammer, mdiSourceBranch, mdiSourceBranchSync } from '@mdi/js'
+import { mdiHammer, mdiSourceBranch } from '@mdi/js'
 import Icon from '@mdi/react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import VersionPane from './Components/VersionPane'
 
 function App() {
     const [changeVersion, toggleChangeVersion] = useState(false)
+    const currentVersion = useRef("2.3")
 
     const Info = (props: {
         app: string
@@ -30,26 +31,28 @@ function App() {
 
     const Actions = () =>
         <div className='grid grid-cols-4'>
-            <div className='flex'>
+            <div className='flex hover:bg-blue-50 cursor-pointer'>
                 <Icon path={mdiHammer} size={1} />
                 Build y deploy
             </div>
-            <div className='flex' onClick={() => toggleChangeVersion(!changeVersion)}>
+            <div className='flex hover:bg-blue-50 cursor-pointer' onClick={() => toggleChangeVersion(!changeVersion)}>
                 <Icon path={mdiSourceBranch} size={1} />
                 Cambiar de versión
             </div>
         </div>
 
+    const versions = ['2.3', '3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '2.4']
+
     return (
-        <div>
-            {changeVersion ? <VersionPane/> : null}
+        <div className='h-screen'>
+            {changeVersion ? <VersionPane currentVersion={currentVersion.current} versions={versions} /> : null}
             <div className='grid grid-rows-2 gap-5'>
                 <div>
                     <Info app="test" version='3.6' lastBuild='14/12' status='desactualizada' />
                     <Actions />
                 </div>
                 <div>
-                    <Info app="cloud" version='2.0' lastBuild='23/11' status='actualizada' />
+                    <Info app="cloud" version={currentVersion.current} lastBuild='23/11' status='actualizada' />
                     <Actions />
                 </div>
             </div>
