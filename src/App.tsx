@@ -1,28 +1,45 @@
 import './App.css'
-import { useReducer } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import VersionPane from './Components/VersionPane'
-import { initUpdateVersionState, reducer, UpdateVersionContext } from './Context/UpdateVersionContext'
 import AppRow from './Components/AppRow'
-
+import { url } from './utils/constants'
+import { Tags } from './Context/UpdateVersionContext'
 
 function App() {
-    const [state, dispatch] = useReducer(reducer, initUpdateVersionState)
+    const [app, setApp] = useState("cloud")
+    const [loading, setLoading] = useState(true)
+    const appsData = useRef<{
+        [k: string]: {
+            name: string
+            currentVersion: string
+            targetVersions: Tags
+        }
+    }>({})
+    useEffect(() => {
 
-    const versions = ['2.3', '2.4']
+        if (!appsData.current[app]) {
+            setLoading(true)
+            fetch(url + `/getTags`)
+                .then(res => res.json())
+                .then(tags => {
+                    appsData.current[app] = {
+                        name: app,
+                        currentVersion: "2.3",
+                        targetVersions: tags
+                    }
+                })
+                .then(() => setLoading(false))
+        }
+    }, [app])
 
     return (
-        <UpdateVersionContext.Provider value={{
-                ...state,
-                dispatch
-            }}>
-            <div className='h-screen'>
-                {state.currentVersion ? <VersionPane currentVersion={state.currentVersion} versions={versions} /> : null}
-                <div className='grid grid-rows-2 gap-5'>
-                    <AppRow app="test" version='3.6' lastBuild='14/12' status='desactualizada'/>
-                    <AppRow app="cloud" version="2.3" lastBuild='23/11' status='actualizada' />
-                </div>
+        <div className='h-screen'>
+            {!loading ? <VersionPane currentVersion={appsData.current[app].currentVersion} versions={appsData.current[app].targetVersions} /> : null}
+            <div className='grid grid-rows-2 gap-5'>
+                <AppRow app="test" version='3.6' lastBuild='14/12' status='desactualizada' />
+                <AppRow app="cloud" version="2.3" lastBuild='23/11' status='actualizada' />
             </div>
-        </UpdateVersionContext.Provider>
+        </div>
     )
 }
 
