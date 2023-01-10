@@ -10,7 +10,7 @@ export default ({currentVersion, versions}: {
         currentVersion: string
         versions: Tags
     }) => {
-        console.log(versions)
+        console.log(JSON.stringify(versions))
     const [selectedBranch, setSelectedBranch] = useState<ItemType<Tags> | undefined>(undefined)
     return (
         <div className="grid grid-cols-2 divide-x-4 float-left max-w-sm">
@@ -18,17 +18,17 @@ export default ({currentVersion, versions}: {
                 <h6>{currentVersion}</h6>
             </div>
             <div>
-                <select onChange={(e) => {console.log(e.target.value);setSelectedBranch(versions.find(v => v.Name === e.target.value))}}>
-                    {versions.map((v, i) => <option key={i} >{v.Name}</option>)}
+                <select onChange={(e) => {console.log(e.target.value);setSelectedBranch(versions.find(v => v.new_reference === e.target.value))}}>
+                    {versions.map((v, i) => <option key={i} >{v.new_reference}</option>)}
                 </select>
                 {selectedBranch ? <div>
-                <p>{selectedBranch.Tagger.Name + ", " + selectedBranch.Tagger.When.match(/.*(?=T)/)![0]}</p>
+                <p>{selectedBranch.commit.Committer.Name + ", " + selectedBranch.commit.Committer.When.match(/.*(?=T)/)![0]}</p>
                 <br/>
-                <p>{selectedBranch.Message}</p>
+                <p>{selectedBranch.commit.Message}</p>
 
                 <br/>
             <div className='flex hover:bg-blue-50 cursor-pointer' onClick={() => {
-                    fetch(`${url}/checkout?tag=${selectedBranch.Name}`)
+                    fetch(`${url}/checkout?tag=${selectedBranch.new_reference}`)
                     .then(res => res.json())
                     .then(res => alert(res))
                 }}>
