@@ -13,9 +13,9 @@ export default () => {
         app: "test"
     } = useContext(AppContext)
     const [selectedBranch, setSelectedBranch] = useState<ItemType<Tags['tags']> | undefined>()
-    const checkout = () => {
-        return axios.get(`${url[app]}/checkout?commit=${selectedBranch?.commit.Hash}`)
-    }
+    const checkout = () => axios.get(`${url[app]}/checkout?commit=${selectedBranch?.commit.Hash}`)
+        .then(console.log)
+        .then(() => location.reload())
     useEffect(() => {
         const target_tag = tags.find(v => v.new_reference === current_version)
         setSelectedBranch(target_tag)

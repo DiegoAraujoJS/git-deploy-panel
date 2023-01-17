@@ -6,11 +6,13 @@ import { url } from "../utils/constants"
 
 export default ({ app }: { app: Apps }) => {
     const { setApp } = useContext(AppContext)
-    const [{ version, last_build, status }, setStatus] = useState({ version: "", last_build: "", status: "" })
+    const [{ version, last_build }, setStatus] = useState({ version: "", last_build: "" })
     const fetchTags = () => {
         fetch(`${url[app]}/getTags`)
-            .then<Tags>(res => res.json())
+            .then<Tags & { last_build: { Version: string, Date: string } }>(res => res.json())
             .then(repo => {
+                console.log(repo)
+                setStatus({ version: repo.tags.find(tag => tag.commit.Hash === repo.last_build.Version)?.new_reference || "", last_build: repo.last_build.Date.split(".")[0] })
                 return setApp({ app, repo })
             })
     }
@@ -27,9 +29,6 @@ export default ({ app }: { app: Apps }) => {
             </p>
             <p className="text-gray-700 font-bold">
                 Último build: {last_build}
-            </p>
-            <p className="text-gray-700 font-bold">
-                Estado: {status}
             </p>
         </div>
         <div className='grid grid-cols-3' onClick={fetchTags}>
