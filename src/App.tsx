@@ -5,14 +5,12 @@ import AppRow from './Components/AppRow'
 import { AppContext, initUpdateVersionState, Tags } from './Context/UpdateVersionContext'
 
 function App() {
-    const [{ repo, app }, setApp] = useState<Omit<typeof initUpdateVersionState, "setApp">>({repo: {tags: [], current_version: ""}, app: "test"})
+    const [{ repo, app }, setApp] = useState<Omit<typeof initUpdateVersionState, "setApp">>({ repo: { tags: [], current_version: "" }, app: "test" })
     return (
-        <AppContext.Provider value={{repo, app, setApp}}>
+        <AppContext.Provider value={{ repo, app, setApp }}>
             <div className='h-screen'>
                 <VersionPane />
-                <div className='grid grid-rows-2 gap-5'>
-                    <AppRow app='test' />
-                </div>
+                <AppRow app='test' />
             </div>
         </AppContext.Provider>
     )
