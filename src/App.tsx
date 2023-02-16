@@ -1,16 +1,33 @@
 import './App.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import VersionPane from './Components/VersionPane'
 import AppRow from './Components/AppRow'
-import { AppContext, initUpdateVersionState, Tags } from './Context/UpdateVersionContext'
+import { AppContext, Tags } from './Context/UpdateVersionContext'
+import { url } from './utils/constants'
 
 function App() {
-    const [{ repo, app }, setApp] = useState<Omit<typeof initUpdateVersionState, "setApp">>({ repo: { tags: [], current_version: "" }, app: "test" })
+    const [{ repos, repo }, setApp] = useState({repos: [] as string[], repo: {name: "", current_version: "", tags: []} as Tags})
+    const fetchRepos = () => {
+        fetch(`${url}/getRepos`)
+            .then(res => res.json())
+            .then(({Repos}) => {
+                if (Repos.length) return fetch(`${url}/getTags?repo=${Repos[0]}`)
+                        .then(res => res.json())
+                        .then(tags => {
+                            console.log(tags)
+                            setApp({ repos: Repos, repo: { ...tags, name: Repos[0] } })
+                        })
+                return setApp({ repos: Repos, repo })
+            })
+    }
+    useEffect(() => {
+        fetchRepos()
+    }, [])
     return (
-        <AppContext.Provider value={{ repo, app, setApp }}>
+        <AppContext.Provider value={{ repos, repo, setApp }}>
             <div className='h-screen'>
                 <VersionPane />
-                <AppRow app='test' />
+                {repos.map((repo, i) => <AppRow app={repo} key={i}/>)}
             </div>
         </AppContext.Provider>
     )

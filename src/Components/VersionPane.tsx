@@ -8,13 +8,10 @@ import { url } from "../utils/constants";
 type ItemType<T> = T extends Array<infer U> ? U : T;
 
 export default () => {
-    const { repo: { current_version, tags }, app }: {
-        repo: Tags
-        app: "test"
-    } = useContext(AppContext)
+    const { repo } = useContext(AppContext)
+    const { tags, current_version, name } = repo
     const [selectedBranch, setSelectedBranch] = useState<ItemType<Tags['tags']> | undefined>()
-    const checkout = () => axios.get(`${url[app]}/checkout?commit=${selectedBranch?.commit.Hash}`)
-        .then(console.log)
+    const checkout = () => axios.get(`${url}/checkout?repo=${name}&commit=${selectedBranch?.commit.Hash}`)
         .then(() => location.reload())
     useEffect(() => {
         const target_tag = tags.find(v => v.new_reference === current_version)

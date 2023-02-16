@@ -16,16 +16,18 @@ export type Tags = {
         new_reference: string
     }[]
     current_version: string
+    name: string
 }
 
 export type Apps = 'test'
 
 export const initUpdateVersionState = {
+    repos: <string[]> {},
     repo: <Tags> {},
-    app: <Apps> "test",
     setApp: <React.Dispatch<React.SetStateAction<Omit<{
-        repo: Tags;
-        app: "test";
+        repos?: string[];
+        repo?: Tags;
+        app?: string;
         setApp: any;
     }, "setApp">>>>(() => {})
 }
