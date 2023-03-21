@@ -2,11 +2,12 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import VersionPane from './Components/VersionPane'
 import AppRow from './Components/AppRow'
-import { AppContext, Tags } from './Context/UpdateVersionContext'
+import { AppContext, Commit, Repo } from './Context/UpdateVersionContext'
 import { url } from './utils/constants'
+import History from './Components/History'
 
 function App() {
-    const [{ repos, repo }, setApp] = useState({repos: [] as string[], repo: {name: "", current_version: "", tags: []} as Tags})
+    const [{ repos, repo }, setApp] = useState({repos: [] as string[], repo: {name: "", current_version: "", commits: [], head: {} as Commit} as Repo})
     const fetchRepos = () => {
         fetch(`${url}/getRepos`)
             .then(res => res.json())
@@ -28,6 +29,7 @@ function App() {
             <div className='h-screen'>
                 <VersionPane />
                 {repos.map((repo, i) => <AppRow app={repo} key={i}/>)}
+                <History/>
             </div>
         </AppContext.Provider>
     )
