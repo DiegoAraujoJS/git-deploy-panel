@@ -1,12 +1,11 @@
-import { mdiHammer, mdiSourceBranch } from "@mdi/js"
-import Icon from "@mdi/react"
-import { useContext, useEffect, useState } from "react"
-import { AppContext, Apps, Tags } from "../Context/UpdateVersionContext"
+import {  mdiSourceBranch } from "@mdi/js"
+import {Icon} from "@mdi/react"
+import { useContext  } from "react"
+import { AppContext } from "../Context/UpdateVersionContext"
 import { url } from "../utils/constants"
 
-export default ({ app }: { app: string }) => {
+ const AppRow = ({ app }: { app: string }) => {
     const { setApp, repos } = useContext(AppContext)
-    const [_, setStatus] = useState<{ version: string, last_build: string }[]>([])
     const fetchTags = () => {
         fetch(`${url}/getTags?repo=${app}`)
             .then(res => res.json())
@@ -29,3 +28,5 @@ export default ({ app }: { app: string }) => {
         </div>
     </div>
 } 
+
+export default AppRow

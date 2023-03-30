@@ -10,7 +10,7 @@ type VersionChangeEvent = {
     CreatedAt: string
 }
 
-export default () => {
+const History = () => {
     const { repo } = useContext(AppContext)
     const { name } = repo
     const [history, setHistory] = useState<VersionChangeEvent[]>([])
@@ -34,3 +34,5 @@ export default () => {
         </div>
     )
 }
+
+export default History

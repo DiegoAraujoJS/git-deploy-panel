@@ -1,5 +1,5 @@
 import { mdiHammer } from "@mdi/js";
-import Icon from "@mdi/react";
+import {Icon} from "@mdi/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react"
 import { AppContext, Repo } from "../Context/UpdateVersionContext"
@@ -7,7 +7,7 @@ import { url } from "../utils/constants";
 
 type ItemType<T> = T extends Array<infer U> ? U : T;
 
-export default () => {
+const VersionPane = () => {
     const { repo } = useContext(AppContext)
     const { commits, current_version, name } = repo
     const [selectedBranch, setSelectedBranch] = useState<ItemType<Repo['commits']> | undefined>()
@@ -15,6 +15,7 @@ export default () => {
         .then(() => location.reload())
     useEffect(() => {
         console.log("VersionPane.tsx")
+        console.log(import.meta.env.MODE)
         setSelectedBranch(commits.find(v => v.new_reference === current_version))
     }, [commits, current_version])
     return (
@@ -43,3 +44,5 @@ export default () => {
         </div>
     )
 }
+
+export default VersionPane
