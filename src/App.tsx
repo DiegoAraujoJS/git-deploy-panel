@@ -5,23 +5,20 @@ import AppRow from './Components/AppRow'
 import { AppContext, Commit, Repo } from './Context/UpdateVersionContext'
 import { url } from './utils/constants'
 import History from './Components/History'
+import axios from 'axios'
 
 function App() {
-    const [{ repos, repo }, setApp] = useState({repos: [] as string[], repo: {name: "", current_version: "", commits: [], head: {} as Commit} as Repo})
-    const fetchRepos = () => {
-        fetch(`${url}/getRepos`)
-            .then(res => res.json())
-            .then(({Repos}) => {
-                if (Repos.length) return fetch(`${url}/getTags?repo=${Repos[0]}`)
-                        .then(res => res.json())
-                        .then(tags => {
-                            console.log(tags)
-                            setApp({ repos: Repos, repo: { ...tags, name: Repos[0] } })
-                        })
-                return setApp({ repos: Repos, repo })
-            })
-    }
+    const [{ repos, repo }, setApp] = useState({repos: [] as string[], repo: {name: "", current_version: "", commits: [], head: {Hash:""} as Commit} as Repo})
+    const fetchRepos = () => 
+        axios.get<{Repos: string[]}>(`${url}/getRepos`)
+        .then(({data: {Repos}}) => {
+            if (!Repos.length) return null
+            axios.get<Repo>(`${url}/getTags?repo=${Repos[0]}`)
+            .then(({data}) => setApp({ repos: Repos, repo: {...data, name: Repos[0]} }))
+        })
+
     useEffect(() => {
+        console.log("App.tsx useEffect")
         fetchRepos()
     }, [])
     return (

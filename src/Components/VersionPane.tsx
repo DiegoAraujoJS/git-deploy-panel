@@ -14,15 +14,15 @@ export default () => {
     const checkout = () => axios.get(`${url}/checkout?repo=${name}&commit=${selectedBranch?.commit.Hash}`)
         .then(() => location.reload())
     useEffect(() => {
-        const target_tag = commits.find(v => v.new_reference === current_version)
-        setSelectedBranch(target_tag)
-    }, [current_version])
+        console.log("VersionPane.tsx")
+        setSelectedBranch(commits.find(v => v.new_reference === current_version))
+    }, [commits, current_version])
     return (
         <div>
             <div className="grid grid-cols-2 divide-x-4 float-left bg-cyan-50 p-5">
                 <div>
                     <p>Repo: {repo.name}</p>
-                    <h6 className="font-bold">{current_version} --- {repo.head?.Hash.slice(0, 7)}</h6>
+                    <h6 className="font-bold">{current_version} --- {repo.head.Hash.slice(0, 7)}</h6>
                 </div>
                 <div>
                     <select value={selectedBranch?.new_reference} onChange={(e) => { setSelectedBranch(commits.find(v => v.new_reference === e.target.value)) }}>
