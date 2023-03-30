@@ -22,7 +22,7 @@ export default () => {
             <div className="grid grid-cols-2 divide-x-4 float-left bg-cyan-50 p-5">
                 <div>
                     <p>Repo: {repo.name}</p>
-                    <h6 className="font-bold">{current_version} --- {repo.head.Hash.slice(0, 7)}</h6>
+                    <h6 className="font-bold">{current_version} --- {repo?.head.Hash.slice(0, 7)}</h6>
                 </div>
                 <div>
                     <select value={selectedBranch?.new_reference} onChange={(e) => { setSelectedBranch(commits.find(v => v.new_reference === e.target.value)) }}>
