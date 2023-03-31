@@ -4,6 +4,7 @@ import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { AppContext } from "../Context/UpdateVersionContext"
 import { url } from "../utils/constants"
+import { checkout } from "../utils/git_actions"
 
 type VersionChangeEvent = {
     Hash: string
@@ -21,6 +22,7 @@ const History = () => {
                 else setHistory([])
             })
     }, [name])
+    // Create a function that will allow you to go back to a previous version of the code.
     return (
         <div className="grid grid-cols-2 divide-x-4 float-left bg-cyan-50 p-5">
             <div>
@@ -28,6 +30,7 @@ const History = () => {
                 {history.map((v, i) => <div key={i} className="flex space-x-10">
                         <p>{v.CreatedAt.split('.')[0]}</p>
                         <p className="font-bold">{v.Hash.slice(0, 7)}</p>
+                        <button className="" onClick={() => checkout(name, v.Hash)}> Volver a esta versión </button>
                     </div>
 )}
             </div>
