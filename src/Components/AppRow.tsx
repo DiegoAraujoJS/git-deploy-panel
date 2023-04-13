@@ -1,4 +1,4 @@
-import {  mdiSourceBranch } from "@mdi/js"
+import {  mdiAlarm, mdiSourceBranch } from "@mdi/js"
 import {Icon} from "@mdi/react"
 import { useContext  } from "react"
 import { AppContext } from "../Context/UpdateVersionContext"
@@ -14,16 +14,20 @@ import { url } from "../utils/constants"
                 setApp({ repos, repo: { ...tags, name: app } })
             })
     }
-    return <div className="grid grid-rows-2 gap-5 p-5 bg-blue-50">
-        <div className="grid grid-cols-4 gap-3 bg-gray-100 h-10 content-center">
-            <p className="text-gray-700 font-bold">
+    return <div >
+        <div >
+            <p >
                 App: {app}
             </p>
         </div>
-        <div className='grid grid-cols-3' onClick={fetchTags}>
-            <div className='flex hover:bg-blue-50 cursor-pointer'>
+        <div  >
+            <div  onClick={fetchTags}>
                 <Icon path={mdiSourceBranch} size={1} />
                 Cambiar de versión
+            </div>
+            <div  onClick={() => console.log('auto update')}>
+                <Icon path={mdiAlarm} size={1} />
+                Auto-Update
             </div>
         </div>
     </div>

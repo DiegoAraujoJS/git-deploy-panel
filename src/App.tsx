@@ -9,6 +9,7 @@ import axios from 'axios'
 
 function App() {
     const [{ repos, repo }, setApp] = useState({repos: [] as string[], repo: {name: "", current_version: "", commits: [], head: {Hash:""} as Commit} as Repo})
+    const [updatingRemote, setUpdatingRemote] = useState(false)
     const fetchRepos = () => 
         axios.get<{Repos: string[]}>(`${url}/getRepos`)
         .then(({data: {Repos}}) => {
@@ -23,7 +24,22 @@ function App() {
     }, [])
     return (
         <AppContext.Provider value={{ repos, repo, setApp }}>
-            <div className='h-screen'>
+            <div >
+                <button onClick={() => {
+                    setUpdatingRemote(true)
+                    axios.get(`${url}/updateRepos`)
+                    .then(() => {
+                        alert("Repositorios actualizados")
+                        setUpdatingRemote(false)
+                        fetchRepos()
+                    })
+                    .catch((err) => {
+                        alert("Ha ocurrido un error:" + err.message)
+                        setUpdatingRemote(false)
+                    })
+                }}>
+                    {updatingRemote ? "Actualizando..." : "Actualizar repositorios"}
+                </button>
                 <VersionPane />
                 {repos.map((repo, i) => <AppRow app={repo} key={i}/>)}
                 <History/>

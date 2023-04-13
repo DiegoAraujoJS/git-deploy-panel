@@ -18,10 +18,10 @@ const VersionPane = () => {
     const select_value = selectedBranch ? selectedBranch.new_reference + " " + selectedBranch.commit.Hash.slice(0,7) : ""
     return (
         <div>
-            <div className="grid grid-cols-2 divide-x-4 float-left bg-cyan-50 p-5">
+            <div>
                 <div>
                     <p>Repo: {repo.name}</p>
-                    <h6 className="font-bold">{current_version} --- {repo?.head?.Hash.slice(0, 7)}</h6>
+                    <h6>{current_version} --- {repo?.head?.Hash.slice(0, 7)}</h6>
                 </div>
                 <div>
                     <select value={select_value} onChange={(e) => { setSelectedBranch(commits.find(v => e.target.value.includes(v.commit.Hash.slice(0,7)))) }}>
@@ -32,7 +32,7 @@ const VersionPane = () => {
                         <br />
                         <p>{selectedBranch.commit.Message}</p>
                         <br />
-                        <div className='flex hover:bg-blue-50 cursor-pointer' onClick={() => checkout(name, selectedBranch?.commit.Hash)}>
+                        <div onClick={() => checkout(name, selectedBranch?.commit.Hash)}>
                             <Icon path={mdiHammer} size={1} />
                             Build y deploy
                         </div>
