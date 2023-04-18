@@ -2,21 +2,17 @@
 
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
-import { AppContext, Commit } from "../Context/UpdateVersionContext"
+import { AppContext, VersionChangeEvent } from "../Context/UpdateVersionContext"
 import { url } from "../utils/constants"
 import { checkout } from "../utils/git_actions"
 import { getDayOfWeek } from "../utils/time"
+import "./History.css"
 
-type VersionChangeEvent = {
-    Hash: string
-    CreatedAt: string
-}
 
 const History = () => {
-    const { repo } = useContext(AppContext)
+    const { repo, modal, setModal } = useContext(AppContext)
     const { name } = repo
     const [history, setHistory] = useState<VersionChangeEvent[]>([])
-    const [isConfirming, setIsConfirming] = useState<null | VersionChangeEvent>(null)
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         if (name.length) axios.get(`${url}/repoHistory?repo=${name}`)
@@ -41,25 +37,25 @@ const History = () => {
                         <p>{getDayOfWeek(v.CreatedAt.split('.')[0])}</p>
                         <p>{repo.commits?.find(c => c.commit.Hash === v.Hash)?.commit.Message}</p>
                         <button onClick={() => {
-                        setIsConfirming(v)
+                        setModal(v)
                     }}> Rollback </button>
                     </div>
 )}
-                {isConfirming && <div className="confirm">
-                    <p>Estás seguro que querés cambiar la versión a {isConfirming.Hash.slice(0, 7)}?</p>
+                {modal && <div className="confirm">
+                    <p>Estás seguro que querés cambiar la versión a {modal.Hash.slice(0, 7)}?</p>
                     <div>
                         <button onClick={() => {
-                            setIsConfirming(null)
+                            setModal(null)
                         }}>Cancelar</button>
                         <button onClick={() => {
                             setLoading(true)
-                            checkout(repo.name, isConfirming.Hash)
+                            checkout(repo.name, modal.Hash)
                                 .catch(err => {
                                     alert("Ha ocurrido un error: " + err.message)
                                     setLoading(false)
-                                    setIsConfirming(null)
+                                    setModal(null)
                                 })
-                        }}>{loading ? "Rollbackeando a " + isConfirming.Hash : "Confirmar"}</button>
+                        }}>{loading ? "Rollbackeando a " + modal.Hash : "Confirmar"}</button>
                     </div>
                 </div>}
             </div>

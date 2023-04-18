@@ -3,11 +3,13 @@ import {Icon} from "@mdi/react";
 import { useContext, useEffect, useState } from "react"
 import { AppContext, Repo } from "../Context/UpdateVersionContext"
 import { checkout } from "../utils/git_actions";
+import { VersionChangeModal } from "./Modal";
+import "./VersionPane.css"
 
 type ItemType<T> = T extends Array<infer U> ? U : T;
 
 const VersionPane = () => {
-    const { repo } = useContext(AppContext)
+    const { repo, modal, setModal } = useContext(AppContext)
     const { commits, current_version, name } = repo
     const [selectedBranch, setSelectedBranch] = useState<ItemType<Repo['commits']> | undefined>()
     useEffect(() => {
@@ -27,10 +29,12 @@ const VersionPane = () => {
                 {selectedBranch ? <div>
                     <p>{selectedBranch.commit.Committer.Name + ", " + selectedBranch.commit.Committer.When.match(/.*(?=T)/)![0]}</p>
                     <p>{selectedBranch.commit.Message}</p>
-                    <div className="action" onClick={() => checkout(name, selectedBranch?.commit.Hash)}>
+                    <div className="action" onClick={() => setModal({Hash: selectedBranch.commit.Hash, CreatedAt: selectedBranch.commit.Committer.When})}>
                         <Icon path={mdiHammer} size={1} />
                         Build y deploy
                     </div>
+                    {modal && <VersionChangeModal/>}
+
                 </div> : null}
             </div>
 

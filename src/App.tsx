@@ -2,13 +2,14 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import VersionPane from './Components/VersionPane'
 import AppRow from './Components/AppRow'
-import { AppContext, Commit, Repo } from './Context/UpdateVersionContext'
+import { AppContext, Commit, Repo, VersionChangeEvent } from './Context/UpdateVersionContext'
 import { url } from './utils/constants'
 import History from './Components/History'
 import axios from 'axios'
 
 function App() {
     const [{ repos, repo }, setApp] = useState({repos: [] as string[], repo: {name: "", current_version: "", commits: [], head: {Hash:""} as Commit} as Repo})
+    const [modal, setModal] = useState<VersionChangeEvent | null>(null)
     const [updatingRemote, setUpdatingRemote] = useState(false)
     const fetchRepos = () => 
         axios.get<{Repos: string[]}>(`${url}/getRepos`)
@@ -23,7 +24,7 @@ function App() {
         fetchRepos()
     }, [])
     return (
-        <AppContext.Provider value={{ repos, repo, setApp }}>
+        <AppContext.Provider value={{ repos, repo, setApp, modal, setModal}}>
             <div className='repos'>
                 <button className='update' onClick={() => {
                     setUpdatingRemote(true)

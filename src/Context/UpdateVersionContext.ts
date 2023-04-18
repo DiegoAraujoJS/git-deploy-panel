@@ -24,13 +24,20 @@ export type Repo = {
 
 export type Apps = 'test'
 
+export type VersionChangeEvent = {
+    Hash: string
+    CreatedAt: string
+}
+
 export const initUpdateVersionState = {
     repos: <string[]> {},
     repo: <Repo> {},
     setApp: <React.Dispatch<React.SetStateAction<{
         repos: string[];
         repo: Repo;
-    }>>>(() => {})
+    }>>>(() => {}),
+    modal: <VersionChangeEvent | null> null,
+    setModal: <React.Dispatch<React.SetStateAction<VersionChangeEvent | null>>>(() => {}),
 }
 
 export const AppContext = createContext(initUpdateVersionState)

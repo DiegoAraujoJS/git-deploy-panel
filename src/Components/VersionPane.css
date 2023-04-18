@@ -1,0 +1,19 @@
+.version_pane__select {
+    flex-grow: 1;
+    position: relative;
+    padding: 0.5rem;
+}
+
+.version_pane__select .action {
+    padding: 0.5rem;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.version_pane__select select {
+    font-size: inherit;
+    font-family: inherit;
+}
