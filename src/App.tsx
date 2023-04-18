@@ -24,8 +24,8 @@ function App() {
     }, [])
     return (
         <AppContext.Provider value={{ repos, repo, setApp }}>
-            <div >
-                <button onClick={() => {
+            <div className='repos'>
+                <button className='update' onClick={() => {
                     setUpdatingRemote(true)
                     axios.get(`${url}/updateRepos`)
                     .then(() => {
@@ -40,8 +40,10 @@ function App() {
                 }}>
                     {updatingRemote ? "Actualizando..." : "Actualizar repositorios"}
                 </button>
-                <VersionPane />
-                {repos.map((repo, i) => <AppRow app={repo} key={i}/>)}
+                <div className="version_table">
+                    <VersionPane />
+                    <div className='app_rows'>{repos.map((repo, i) => <AppRow app={repo} key={i}/>)}</div>
+                </div>
                 <History/>
             </div>
         </AppContext.Provider>

@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Nunito", sans-serif;
+    background: whitesmoke;
+    padding: 1rem;
+    font-size: 1.25rem;
+}
+
+/* Utility Classes */
+
+.left {
+    float: left;
+}
+
+/* Utility Classes */
+
+.version_pane {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.app_rows {
+    flex:1;
+}
+
+.app_row {
+    border-bottom: 1px solid black;
+}
+
+.version_table {
+    display: flex;
+}
+
+.event {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 2fr 1fr;
+    margin-top: 0.25rem;
+}
+
+.event:hover {
+    background: lightgrey;
+}
+
+.event p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.event button {
+    cursor: pointer;
+    width: 35%;
+    font-family: inherit;
+}
+
+.history .confirm {
+    background: rgba(255, 0, 0, 0.75);
+    position: fixed;
+    bottom: 50%;
+    left: 50%;
+    width: 25vw;
+    transform: translate(-50%);
+    height: 10vw;
+    color: black;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border-radius: 0.25rem;
+}
+
+.history .confirm div {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.history .confirm div button {
+    font-family: inherit;
+    font-size: inherit;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.action {
+    width: fit-content;
+    margin-top: 0.25rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+}
+
+.action:hover {
+    background: lightblue
+}
+
+.version_pane__select {
+    flex-grow: 1;
+    position: relative;
+    padding: 0.5rem;
+}
+
+.version_pane__select .action {
+    padding: 0.5rem;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.version_pane__select select {
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.update {
+    margin: auto;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.repos {
+    display: grid;
+    gap: 1rem;
+}

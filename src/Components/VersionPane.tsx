@@ -11,34 +11,29 @@ const VersionPane = () => {
     const { commits, current_version, name } = repo
     const [selectedBranch, setSelectedBranch] = useState<ItemType<Repo['commits']> | undefined>()
     useEffect(() => {
-        console.log("VersionPane.tsx")
-        console.log(import.meta.env.MODE)
         setSelectedBranch(commits?.find(v => v.new_reference === current_version))
     }, [commits, current_version])
     const select_value = selectedBranch ? selectedBranch.new_reference + " " + selectedBranch.commit.Hash.slice(0,7) : ""
     return (
-        <div>
+        <div className="version_pane">
             <div>
-                <div>
-                    <p>Repo: {repo.name}</p>
-                    <h6>{current_version} --- {repo?.head?.Hash.slice(0, 7)}</h6>
-                </div>
-                <div>
-                    <select value={select_value} onChange={(e) => { setSelectedBranch(commits.find(v => e.target.value.includes(v.commit.Hash.slice(0,7)))) }}>
-                        {commits?.map((v, i) => <option key={i} >{v.new_reference} {v.commit.Hash.slice(0,7)}</option>)}
-                    </select>
-                    {selectedBranch ? <div>
-                        <p>{selectedBranch.commit.Committer.Name + ", " + selectedBranch.commit.Committer.When.match(/.*(?=T)/)![0]}</p>
-                        <br />
-                        <p>{selectedBranch.commit.Message}</p>
-                        <br />
-                        <div onClick={() => checkout(name, selectedBranch?.commit.Hash)}>
-                            <Icon path={mdiHammer} size={1} />
-                            Build y deploy
-                        </div>
-                    </div> : null}
-                </div>
+                <p>Repo: {repo.name}</p>
+                <h6>{current_version} --- {repo?.head?.Hash.slice(0, 7)}</h6>
             </div>
+            <div className="version_pane__select">
+                <select value={select_value} onChange={(e) => { setSelectedBranch(commits.find(v => e.target.value.includes(v.commit.Hash.slice(0,7)))) }}>
+                    {commits?.map((v, i) => <option key={i} >{v.new_reference} {v.commit.Hash.slice(0,7)}</option>)}
+                </select>
+                {selectedBranch ? <div>
+                    <p>{selectedBranch.commit.Committer.Name + ", " + selectedBranch.commit.Committer.When.match(/.*(?=T)/)![0]}</p>
+                    <p>{selectedBranch.commit.Message}</p>
+                    <div className="action" onClick={() => checkout(name, selectedBranch?.commit.Hash)}>
+                        <Icon path={mdiHammer} size={1} />
+                        Build y deploy
+                    </div>
+                </div> : null}
+            </div>
+
         </div>
     )
 }

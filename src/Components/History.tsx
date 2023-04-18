@@ -27,34 +27,42 @@ const History = () => {
     }, [name])
     // Create a function that will allow you to go back to a previous version of the code.
     return (
-        <div>
-            <div>
-                <p>{repo.name}</p>
-                {history.map((v, i) => <div key={i}>
-                        <p>{getDayOfWeek(v.CreatedAt.split('.')[0])}</p> <p>{v.Hash.slice(0, 7)}</p>
-                        <button  onClick={() => {
+        <div className="history">
+            <h3>{repo.name}</h3>
+            <div className="events">
+                <div className="event">
+                    <p>Hash</p>
+                    <p>Fecha</p>
+                    <p>Mensaje</p>
+                    <p>Acción</p>
+                </div>
+                {history.map((v, i) => <div key={i} className="event">
+                        <p>{v.Hash.slice(0, 7)}</p>
+                        <p>{getDayOfWeek(v.CreatedAt.split('.')[0])}</p>
+                        <p>{repo.commits?.find(c => c.commit.Hash === v.Hash)?.commit.Message}</p>
+                        <button onClick={() => {
                         setIsConfirming(v)
                     }}> Rollback </button>
                     </div>
 )}
-            </div>
-                {isConfirming && <div>
-                    Estás seguro que querés cambiar la versión a {isConfirming.Hash.slice(0, 7)}?
+                {isConfirming && <div className="confirm">
+                    <p>Estás seguro que querés cambiar la versión a {isConfirming.Hash.slice(0, 7)}?</p>
                     <div>
-                        <button  onClick={() => {
+                        <button onClick={() => {
                             setIsConfirming(null)
                         }}>Cancelar</button>
-                        <button  onClick={() => {
+                        <button onClick={() => {
                             setLoading(true)
                             checkout(repo.name, isConfirming.Hash)
-                            .catch(err => {
-                                alert("Ha ocurrido un error: " + err.message)
-                                setLoading(false)
-                                setIsConfirming(null)
-                            })
+                                .catch(err => {
+                                    alert("Ha ocurrido un error: " + err.message)
+                                    setLoading(false)
+                                    setIsConfirming(null)
+                                })
                         }}>{loading ? "Rollbackeando a " + isConfirming.Hash : "Confirmar"}</button>
                     </div>
-            </div>}
+                </div>}
+            </div>
         </div>
     )
 }

@@ -14,18 +14,18 @@ import { url } from "../utils/constants"
                 setApp({ repos, repo: { ...tags, name: app } })
             })
     }
-    return <div >
+    return <div className="app_row">
         <div >
             <p >
                 App: {app}
             </p>
         </div>
         <div  >
-            <div  onClick={fetchTags}>
+            <div className="action" onClick={fetchTags}>
                 <Icon path={mdiSourceBranch} size={1} />
                 Cambiar de versión
             </div>
-            <div  onClick={() => console.log('auto update')}>
+            <div className="action" onClick={() => console.log('auto update')}>
                 <Icon path={mdiAlarm} size={1} />
                 Auto-Update
             </div>
