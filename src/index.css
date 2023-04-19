@@ -19,38 +19,11 @@ body {
     float: left;
 }
 
+.loading {
+    cursor: wait;
+}
+
 /* Utility Classes */
-
-.version_pane {
-    text-align: center;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.app_rows {
-    flex:1;
-}
-
-.app_row {
-    border-bottom: 1px solid black;
-}
-
-.version_table {
-    display: flex;
-}
-
-.action {
-    width: fit-content;
-    margin-top: 0.25rem;
-    cursor: pointer;
-    border-radius: 0.25rem;
-}
-
-.action:hover {
-    background: lightblue
-}
-
 
 .update {
     margin: auto;
@@ -59,7 +32,43 @@ body {
     font-family: inherit;
 }
 
+.update:hover {
+    background: lightblue;
+}
+
 .repos {
     display: grid;
     gap: 1rem;
+}
+
+.confirm {
+    background: rgb(49,166,209);
+    position: fixed;
+    bottom: 50%;
+    left: 50%;
+    width: 25vw;
+    transform: translate(-50%);
+    height: 10vw;
+    color: black;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border-radius: 0.25rem;
+    border: 1px solid black;
+}
+
+.confirm div {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm div button {
+    font-family: inherit;
+    font-size: inherit;
+    margin-right: 0.5rem;
+    cursor: pointer;
 }

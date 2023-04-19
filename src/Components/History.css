@@ -1,43 +1,12 @@
-.confirm {
-    background: rgba(255, 255, 0, 0.75);
-    position: fixed;
-    bottom: 50%;
-    left: 50%;
-    width: 25vw;
-    transform: translate(-50%);
-    height: 10vw;
-    color: black;
-    font-size: 1.25rem;
-    font-weight: bold;
-    display: flex;
-    flex-direction: column;
+.events {
+    display: grid;
+    grid-template-columns: 0.5fr 0.90fr 0.3fr 2fr 0.5fr;
+    margin-top: 0.25rem;
     text-align: center;
-    border-radius: 0.25rem;
-    border: 1px solid black;
-}
-
-.confirm div {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.confirm div button {
-    font-family: inherit;
-    font-size: inherit;
-    margin-right: 0.5rem;
-    cursor: pointer;
 }
 
 .event {
-    display: grid;
-    grid-template-columns: 0.5fr 1fr 2fr 1fr;
-    margin-top: 0.25rem;
-}
-
-.event:hover {
-    background: lightgrey;
+    display: contents;
 }
 
 .event p {
@@ -48,6 +17,28 @@
 
 .event button {
     cursor: pointer;
-    width: 35%;
+    width: 50%;
     font-family: inherit;
+    font-size: 1rem;
+}
+
+.event button:hover {
+    background-color: lightblue;
+}
+
+.event:hover > * {
+    background-color: lightgrey;
+}
+
+.event * {
+    padding: 0.15rem;
+    border: 0.5px solid grey;
+}
+
+#action_column_name {
+    text-align: left
+}
+
+.history h3 {
+    text-decoration: underline;
 }

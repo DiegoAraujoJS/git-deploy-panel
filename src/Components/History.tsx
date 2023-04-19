@@ -4,60 +4,43 @@ import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { AppContext, VersionChangeEvent } from "../Context/UpdateVersionContext"
 import { url } from "../utils/constants"
-import { checkout } from "../utils/git_actions"
 import { getDayOfWeek } from "../utils/time"
 import "./History.css"
 
-
 const History = () => {
-    const { repo, modal, setModal } = useContext(AppContext)
+    const { repo, setModal, reload } = useContext(AppContext)
     const { name } = repo
     const [history, setHistory] = useState<VersionChangeEvent[]>([])
-    const [loading, setLoading] = useState(false)
     useEffect(() => {
         if (name.length) axios.get(`${url}/repoHistory?repo=${name}`)
             .then(res => {
                 if (res && res.data && Array.isArray(res.data)) setHistory(res.data)
                 else setHistory([])
             })
-    }, [name])
+    }, [name, reload])
     // Create a function that will allow you to go back to a previous version of the code.
     return (
         <div className="history">
-            <h3>{repo.name}</h3>
+            <h3>Historial de cambio de versiones -- {repo.name}</h3>
             <div className="events">
-                <div className="event">
-                    <p>Hash</p>
+                    <p>Dev</p>
                     <p>Fecha</p>
+                    <p>Hash</p>
                     <p>Mensaje</p>
-                    <p>Acción</p>
-                </div>
-                {history.map((v, i) => <div key={i} className="event">
-                        <p>{v.Hash.slice(0, 7)}</p>
-                        <p>{getDayOfWeek(v.CreatedAt.split('.')[0])}</p>
-                        <p>{repo.commits?.find(c => c.commit.Hash === v.Hash)?.commit.Message}</p>
+                    <p id="action_column_name">Acción</p>
+                {history.map(({Hash, CreatedAt}, i) => {
+                    const v = repo.commits?.find(c =>  c.commit.Hash === Hash)
+                    return <div key={i} className="event">
+                        <p>{v?.commit.Committer.Name}</p>
+                        <p>{getDayOfWeek(CreatedAt.split('.')[0])}</p>
+                        <p>{Hash.slice(0, 7)}</p>
+                        <p>{v?.commit.Message}</p>
                         <button onClick={() => {
-                        setModal(v)
-                    }}> Rollback </button>
+                            setModal({Hash, CreatedAt})
+                        }}> Rollback </button>
                     </div>
+                }
 )}
-                {modal && <div className="confirm">
-                    <p>Estás seguro que querés cambiar la versión a {modal.Hash.slice(0, 7)}?</p>
-                    <div>
-                        <button onClick={() => {
-                            setModal(null)
-                        }}>Cancelar</button>
-                        <button onClick={() => {
-                            setLoading(true)
-                            checkout(repo.name, modal.Hash)
-                                .catch(err => {
-                                    alert("Ha ocurrido un error: " + err.message)
-                                    setLoading(false)
-                                    setModal(null)
-                                })
-                        }}>{loading ? "Rollbackeando a " + modal.Hash : "Confirmar"}</button>
-                    </div>
-                </div>}
             </div>
         </div>
     )

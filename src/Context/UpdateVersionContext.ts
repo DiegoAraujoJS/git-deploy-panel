@@ -17,7 +17,6 @@ export type Repo = {
         commit: Commit
         new_reference: string
     }[]
-    current_version: string
     name: string
     head: Commit
 }
@@ -38,6 +37,8 @@ export const initUpdateVersionState = {
     }>>>(() => {}),
     modal: <VersionChangeEvent | null> null,
     setModal: <React.Dispatch<React.SetStateAction<VersionChangeEvent | null>>>(() => {}),
+    reload: <number> 0,
+    setReload: <React.Dispatch<React.SetStateAction<number>>>(() => {}),
 }
 
 export const AppContext = createContext(initUpdateVersionState)

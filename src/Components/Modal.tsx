@@ -4,9 +4,9 @@ import { checkout } from '../utils/git_actions'
 
 export const VersionChangeModal = () => {
     const [loading, setLoading] = useState(false)
-    const {repo, modal, setModal} = useContext(AppContext)
+    const {repo, modal, setModal, reload, setReload} = useContext(AppContext)
     return <div className="confirm">
-        <p>Estás seguro que querés cambiar la versión a {modal?.Hash.slice(0, 7)}?</p>
+        <p>Estás seguro que querés cambiar la versión de {repo.name} a {modal?.Hash.slice(0, 7)}?</p>
         <div>
             <button onClick={() => {
                 setModal(null)
@@ -14,12 +14,18 @@ export const VersionChangeModal = () => {
             <button onClick={() => {
                 setLoading(true)
                 checkout(repo.name, modal!.Hash)
-                    .catch(err => {
-                        alert("Ha ocurrido un error: " + err.message)
+                    .then(() => {
+                        setReload(reload + 1)
                         setLoading(false)
                         setModal(null)
                     })
-            }}>{loading ? "Rollbackeando a " + modal!.Hash : "Confirmar"}</button>
+                    .catch(err => {
+                        console.log(err)
+                        alert("Ha ocurrido un error en el servidor: " + err.response.data)
+                        setLoading(false)
+                        setModal(null)
+                    })
+            }}>{loading ? `Moviendo versión...` : "Confirmar"}</button>
         </div>
     </div>
 }
