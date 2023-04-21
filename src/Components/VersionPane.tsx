@@ -1,38 +1,35 @@
 import { mdiHammer } from "@mdi/js";
 import {Icon} from "@mdi/react";
-import { useContext, useEffect, useState } from "react"
-import { AppContext, Commit } from "../Context/UpdateVersionContext"
+import { useStore } from "../Context/store";
 import { toHexString } from "../utils/conversions";
+import { getDayOfWeek } from "../utils/time";
 import "./VersionPane.css"
+import { shallow } from 'zustand/shallow'
 
 const VersionPane = () => {
-    const { repo, setModal } = useContext(AppContext)
-    const { commits } = repo
-    const [selectedBranch, setSelectedBranch] = useState<Commit | undefined>()
-    useEffect(() => {
-        setSelectedBranch({...repo.head, Hash: toHexString(repo.head.Hash as unknown as number[])})
-    }, [commits, repo.head])
-    const select_value = selectedBranch?.Hash.slice(0,7)
+    const [repo, setModal, commitSelectModal, setCommitSelectModal] = useStore(state => [state.repo, state.setModal, state.commitSelectModal, state.setCommitSelectModal], shallow)
     return (
         <div className="version_pane">
             <div>
-                <p>Repo: {repo.name}</p>
+                <p>Repo: {repo.name} </p>
                 <h6>Versión actual: {toHexString(repo?.head?.Hash as unknown as number[]).slice(0, 7)}</h6>
             </div>
+            <button className="commit_select" onClick={() => setCommitSelectModal({
+                active: true,
+                data: repo.head
+            })}>
+                {toHexString(commitSelectModal?.data.Hash).slice(0, 7)}
+            </button>
             <div className="version_pane__select">
-                <select value={select_value} onChange={(e) => { setSelectedBranch(commits.find(v => e.target.value.includes(v.commit.Hash.slice(0,7)))?.commit) }}>
-                    {commits?.map((v, i) => <option key={i} >{v.commit.Hash.slice(0,7)}</option>)}
-                </select>
-                {selectedBranch ? <div>
-                    <p>{selectedBranch.Committer?.Name + ", " + selectedBranch.Committer?.When.match(/.*(?=T)/)![0]}</p>
-                    <p>{selectedBranch.Message}</p>
-                    <div className="action" onClick={() => setModal({Hash: selectedBranch.Hash, CreatedAt: selectedBranch.Committer.When})}>
+                {commitSelectModal ? <div>
+                    <p>{commitSelectModal.data.Committer?.Name + ", " + getDayOfWeek(commitSelectModal.data.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
+                    <p>{commitSelectModal.data.Message}</p>
+                    <div className="action" onClick={() => setModal({Hash: toHexString(commitSelectModal.data.Hash), CreatedAt: commitSelectModal.data.Committer.When})}>
                         <Icon path={mdiHammer} size={1} />
                         Build y deploy
                     </div>
                 </div> : null}
             </div>
-
         </div>
     )
 }

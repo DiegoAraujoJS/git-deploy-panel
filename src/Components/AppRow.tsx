@@ -1,19 +1,13 @@
 import {  mdiAlarm, mdiSourceBranch } from "@mdi/js"
 import {Icon} from "@mdi/react"
-import axios from "axios"
-import { useContext  } from "react"
-import { AppContext } from "../Context/UpdateVersionContext"
-import { url } from "../utils/constants"
-import { toHexString } from "../utils/conversions"
+import { useStore } from "../Context/store"
 
  const AppRow = ({ app }: { app: string }) => {
-    const { setApp, repos } = useContext(AppContext)
+    const [setApp] = useStore(state => [state.setApp, state.repos])
     const fetchTags = (e: any) => {
         e.target.classList.add('loading')
-        axios.get<any>(`${url}/getTags?repo=${app}`)
-            .then(tags => {
-                e.target.classList.remove('loading')
-                setApp({ repos, repo: { ...tags.data, name: app, commits: tags.data.commits.map((commit: any) => ({...commit, commit: {...commit.commit, Hash: toHexString(commit.commit.Hash as unknown as number[])}}))}})})
+        setApp(app)
+        e.target.classList.remove('loading')
     }
     return <div className="app_row">
         <div >

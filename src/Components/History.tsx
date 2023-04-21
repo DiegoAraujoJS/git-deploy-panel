@@ -1,17 +1,20 @@
 // Create a History Component. This component will display the history of version changes in time. The component consumes an api endpoint (/repoHistory?repo=${repo.name}) that returns a list of objects of the form {Hash string, CreatedAt string}. The component shows those results.
 
 import axios from "axios"
-import { useContext, useEffect, useState } from "react"
-import { AppContext, VersionChangeEvent } from "../Context/UpdateVersionContext"
+import { useEffect, useState } from "react"
+import { useStore } from "../Context/store"
+import { VersionChangeEvent } from "../Context/store"
 import { url } from "../utils/constants"
+import { toHexString } from "../utils/conversions"
 import { getDayOfWeek } from "../utils/time"
 import "./History.css"
 
 const History = () => {
-    const { repo, setModal, reload } = useContext(AppContext)
+    const [repo, reload, setModal] = useStore(state => [state.repo, state.reload, state.setModal])
     const { name } = repo
     const [history, setHistory] = useState<VersionChangeEvent[]>([])
     useEffect(() => {
+        console.log("history useEffect", name)
         if (name.length) axios.get(`${url}/repoHistory?repo=${name}`)
             .then(res => {
                 if (res && res.data && Array.isArray(res.data)) setHistory(res.data)
@@ -29,7 +32,7 @@ const History = () => {
                     <p>Mensaje</p>
                     <p id="action_column_name">Acción</p>
                 {history.map(({Hash, CreatedAt}, i) => {
-                    const v = repo.commits?.find(c =>  c.commit.Hash === Hash)
+                    const v = repo.commits?.find(c =>  toHexString(c.commit.Hash as unknown as number[]) === Hash)
                     return <div key={i} className="event">
                         <p>{v?.commit.Committer.Name}</p>
                         <p>{getDayOfWeek(CreatedAt.split('.')[0])}</p>

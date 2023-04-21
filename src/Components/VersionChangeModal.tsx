@@ -1,10 +1,10 @@
-import {useContext, useState} from 'react'
-import {AppContext} from '../Context/UpdateVersionContext'
+import {useState} from 'react'
+import { useStore } from '../Context/store'
 import { checkout } from '../utils/git_actions'
 
 export const VersionChangeModal = () => {
     const [loading, setLoading] = useState(false)
-    const {repo, modal, setModal, reload, setReload} = useContext(AppContext)
+    const [modal, setModal, repo, setReload, setApp] = useStore(state => [state.modal, state.setModal, state.repo, state.setReload, state.setApp])
     return <div className="confirm">
         <p>Estás seguro que querés cambiar la versión de {repo.name} a {modal?.Hash.slice(0, 7)}?</p>
         <div>
@@ -15,7 +15,8 @@ export const VersionChangeModal = () => {
                 setLoading(true)
                 checkout(repo.name, modal!.Hash)
                     .then(() => {
-                        setReload(reload + 1)
+                        setApp(repo.name)
+                        setReload()
                         setLoading(false)
                         setModal(null)
                     })
