@@ -4,6 +4,7 @@
     margin-top: 0.25rem;
     text-align: center;
     height: 100%;
+    border: 1px solid grey;
 }
 
 .event {

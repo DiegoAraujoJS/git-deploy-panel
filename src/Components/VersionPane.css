@@ -36,6 +36,7 @@
 
 .version_table {
     display: flex;
+    min-height: 30vh;
 }
 
 .action {
