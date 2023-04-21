@@ -3,6 +3,7 @@
     grid-template-columns: 0.5fr 0.90fr 0.3fr 2fr 0.5fr;
     margin-top: 0.25rem;
     text-align: center;
+    height: 100%;
 }
 
 .event {
@@ -33,6 +34,7 @@
 .event * {
     padding: 0.15rem;
     border: 0.5px solid grey;
+    min-height: 30px;
 }
 
 #action_column_name {

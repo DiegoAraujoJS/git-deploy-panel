@@ -15,7 +15,7 @@ type UpdateReposError = {
 }
 
 function App() {
-    const [setApp, repos, modal, commitSelectModal] = useStore(state => [state.setApp, state.repos, state.modal, state.commitSelectModal])
+    const [setApp, repos, modal, commitSelectModal, repo] = useStore(state => [state.setApp, state.repos, state.modal, state.commitSelectModal, state.repo])
     const [updatingRemote, setUpdatingRemote] = useState(false)
     useEffect(() => {
         // On the line below we are initializing the app with the first repo in the list
@@ -28,15 +28,13 @@ function App() {
                 axios.get(`${url}/updateRepos`)
                     .then(() => {
                         alert("Repositorios actualizados")
+                        setApp(repo.name)
                         setUpdatingRemote(false)
                     })
                     .catch((err) => {
                         let message = ""
                         if (err.response.data) {
-                            console.log(err.response.data)
                             message = err.response.data.map(({Err}: {Err: UpdateReposError}) => `${Err.Err}\t${Err.Name}`)
-
-                            console.log(message)
                         }
                         alert("Ha ocurrido un error: " + message)
                         setUpdatingRemote(false)
@@ -50,7 +48,7 @@ function App() {
             </div>
             <History/>
             {modal && <VersionChangeModal/>}
-            {commitSelectModal && <CommitSelectModal/>}
+            {commitSelectModal?.active && <CommitSelectModal/>}
         </div>
     )
 }

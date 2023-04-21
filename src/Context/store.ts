@@ -2,7 +2,7 @@ import axios from 'axios';
 import {create} from 'zustand';
 import { url } from '../utils/constants';
 
-export type Commit = {
+type Commit = {
     Name: string
     Message: string
     Target: string
@@ -14,7 +14,7 @@ export type Commit = {
     Hash: number[]
 }
 
-export type Repo = {
+type Repo = {
     commits: {
         commit: Commit
         new_reference: string
@@ -22,8 +22,6 @@ export type Repo = {
     name: string
     head: Commit
 }
-
-export type Apps = 'test'
 
 export type VersionChangeEvent = {
     Hash: string
@@ -51,7 +49,7 @@ export const useStore = create<IStore>((set, get) => ({
             repos = await axios.get(`${url}/getRepos`).then(res => res.data.Repos)
         }
         const {data} = await axios.get<Repo>(`${url}/getTags?repo=${init ? repos[0] : app}`)
-        set(state => ({...state, repos, repo: {...data, name: init ? repos[0] : app}, commitSelectModal: {active: false, data: data.head}}))
+        set(state => ({...state, repos, repo: {...data, name: init ? repos[0] : app}, commitSelectModal: {active: !!get().commitSelectModal?.active, data: data.head}}))
     },
     modal: null,
     setModal: (modal) => set(state => ({...state, modal})),
