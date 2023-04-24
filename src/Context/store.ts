@@ -22,6 +22,7 @@ type Repo = {
     }[]
     name: string
     head: Commit
+    branches: string[]
 }
 
 export type VersionChangeEvent = {
@@ -64,7 +65,7 @@ const getApp = async (get: () => IStore, app: string, init?: boolean) => {
 
 export const useStore = create<IStore>((set, get) => ({
     repos: [],
-    repo: {name: "", commits: [], head: {Hash:[] as number[]} as Commit} as Repo,
+    repo: {name: "",branches: [], commits: [], head: {Hash:[] as number[]} as Commit} as Repo,
     setApp: async (app, init) => {
         const {repos, repo} = await getApp(get, app, init)
         set(state => ({...state, repos, repo: {...repo, name: init ? repos[0] : app}, commitSelectModal: {active: !!get().commitSelectModal?.active, data: repo.head}}))
