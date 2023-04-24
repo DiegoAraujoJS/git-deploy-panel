@@ -7,19 +7,16 @@ import "./VersionPane.css"
 import { shallow } from 'zustand/shallow'
 
 const VersionPane = () => {
-    const [repo, setModal, commitSelectModal, setCommitSelectModal] = useStore(state => [state.repo, state.setModal, state.commitSelectModal, state.setCommitSelectModal], shallow)
+    const [repo, setModal, commitSelectModal] = useStore(state => [state.repo, state.setModal, state.commitSelectModal, state.setCommitSelectModal], shallow)
     return (
         <div className="version_pane">
             <div>
                 <p>Repo: {repo.name} </p>
                 <h6>Versión actual: {toHexString(repo?.head?.Hash as unknown as number[]).slice(0, 7)}</h6>
             </div>
-            <button className="commit_select" onClick={() => setCommitSelectModal({
-                active: true,
-                data: repo.head
-            })}>
+            <div className="commit_select">
                 {toHexString(commitSelectModal?.data.Hash).slice(0, 7)}
-            </button>
+            </div>
             <div className="version_pane__select">
                 {commitSelectModal ? <div>
                     <p>{commitSelectModal.data.Committer?.Name + ", " + getDayOfWeek(commitSelectModal.data.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>

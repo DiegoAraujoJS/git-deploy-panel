@@ -1,6 +1,6 @@
 // Create a History Component. This component will display the history of version changes in time. The component consumes an api endpoint (/repoHistory?repo=${repo.name}) that returns a list of objects of the form {Hash string, CreatedAt string}. The component shows those results.
 
-import axios from "axios"
+import axios from "../utils/client"
 import { useEffect, useState } from "react"
 import { useStore } from "../Context/store"
 import { VersionChangeEvent } from "../Context/store"
@@ -14,7 +14,6 @@ const History = () => {
     const { name } = repo
     const [history, setHistory] = useState<VersionChangeEvent[]>([])
     useEffect(() => {
-        console.log("history useEffect", name)
         if (name.length) axios.get(`${url}/repoHistory?repo=${name}`)
             .then(res => {
                 if (res && res.data && Array.isArray(res.data)) setHistory(res.data)
@@ -24,7 +23,7 @@ const History = () => {
     // Create a function that will allow you to go back to a previous version of the code.
     return (
         <div className="history">
-            <h3>Historial de cambio de versiones -- {repo.name}</h3>
+            <h3>Historial de deploys -- {repo.name}</h3>
             <div className="events">
                     <p>Dev</p>
                     <p>Fecha</p>

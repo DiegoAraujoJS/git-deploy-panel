@@ -5,7 +5,7 @@ import { checkout } from '../utils/git_actions'
 export const VersionChangeModal = () => {
     const [loading, setLoading] = useState(false)
     const [modal, setModal, repo, setReload, setApp] = useStore(state => [state.modal, state.setModal, state.repo, state.setReload, state.setApp])
-    return <div className="confirm">
+    return <div className="confirm" onClick={(e) => e.stopPropagation()}>
         <p>Estás seguro que querés cambiar la versión de {repo.name} a {modal?.Hash.slice(0, 7)}?</p>
         <div>
             <button onClick={() => {

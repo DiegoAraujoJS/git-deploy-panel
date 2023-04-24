@@ -1,13 +1,14 @@
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import VersionPane from './Components/VersionPane'
 import AppRow from './Components/AppRow'
 import { url } from './utils/constants'
 import History from './Components/History'
-import axios from 'axios'
+import axios from './utils/client'
 import { VersionChangeModal } from './Components/VersionChangeModal'
 import { CommitSelectModal } from './Components/CommitSelectModal'
 import { useStore } from './Context/store'
+import { AutoUpdateModal } from './Components/AutoUpdateModal'
 
 type UpdateReposError = {
     Err: string
@@ -15,13 +16,17 @@ type UpdateReposError = {
 }
 
 function App() {
-    const [setApp, repos, modal, commitSelectModal, repo] = useStore(state => [state.setApp, state.repos, state.modal, state.commitSelectModal, state.repo])
+    const [setApp, repos, modal, commitSelectModal, repo, autoUpdateModal] = useStore(state => [state.setApp, state.repos, state.modal, state.commitSelectModal, state.repo, state.autoUpdateModal])
     const [updatingRemote, setUpdatingRemote] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
     useEffect(() => {
+        if (localStorage.getItem('password') !== null) {
+            setIsAuthenticated(true)
+        }
         // On the line below we are initializing the app with the first repo in the list
         setApp('', true)
     }, [])
-    return (
+    if (isAuthenticated) return (
         <div className='repos'>
             <button className='update' onClick={() => {
                 setUpdatingRemote(true)
@@ -49,6 +54,18 @@ function App() {
             <History/>
             {modal && <VersionChangeModal/>}
             {commitSelectModal?.active && <CommitSelectModal/>}
+            {autoUpdateModal.active && <AutoUpdateModal/>}
+        </div>
+    )
+    return (
+        <div className='login'>
+            <h1>Git Deploy</h1>
+            <input type='password' placeholder='Contraseña' onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    localStorage.setItem('password', e.currentTarget.value)
+                    location.reload()
+                }
+            }}/>
         </div>
     )
 }

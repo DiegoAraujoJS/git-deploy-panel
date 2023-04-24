@@ -41,8 +41,8 @@
 
 .action {
     width: fit-content;
-    margin-top: 0.25rem;
     cursor: pointer;
+    margin-top: 0.25rem;
     border-radius: 0.25rem;
 }
 
@@ -50,9 +50,14 @@
     background: lightblue
 }
 
+.title {
+    cursor: pointer;
+}
+
 .commit_select {
     font-family: inherit;
     font-size: inherit;
     margin-top: 0.5rem;
     padding: 0 0.5rem;
+    background: lightcoral;
 }
