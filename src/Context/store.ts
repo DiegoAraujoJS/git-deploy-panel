@@ -2,7 +2,7 @@ import axios from '../utils/client';
 import {create} from 'zustand';
 import { url } from '../utils/constants';
 
-type Commit = {
+interface Commit {
     Name: string
     Message: string
     Target: string
@@ -14,7 +14,7 @@ type Commit = {
     Hash: number[]
 }
 
-type Repo = {
+interface Repo {
     commits: {
         commit: Commit
         new_reference: string
@@ -25,12 +25,12 @@ type Repo = {
     branches: string[]
 }
 
-export type VersionChangeEvent = {
+export interface VersionChangeEvent {
     Hash: string
     CreatedAt: string
 }
 
-type AutoUpdateStatus = {
+interface AutoUpdateStatus {
     seconds: number
     branch: string
 }
@@ -63,6 +63,19 @@ const getApp = async (get: () => IStore, app: string, init?: boolean) => {
     }
 }
 
+const handleModal: <T>(set: (partial: IStore | Partial<IStore> | ((state: IStore) => IStore | Partial<IStore>), replace?: boolean | undefined) => void, get: () => IStore, app: T, modal: 'autoUpdateModal' | 'commitSelectModal') => void = (set, get, app, modal) => {
+        const modalValue = get()[modal]
+        if (app === "close") return set(state => ({...state, [modal]: {...modalValue, active: false}}))
+        if (typeof app === "string") {
+            if (app === get().repo.name) return set(state => modalValue ? ({...state, [modal]: {...modalValue, active: true}}) : state)
+            return getApp(get, app).then(
+                ({repo, repos}) => set(state => ({...state, repo: {...repo, name: app}, repos, [modal]: {...modalValue, active: true}}))
+            )
+        }
+        console.log(app)
+        return set(state => ({...state, [modal]: {active: false, data: {...modalValue?.data, ...app,  [get().repo.name]: app}}}))
+}
+
 export const useStore = create<IStore>((set, get) => ({
     repos: [],
     repo: {name: "",branches: [], commits: [], head: {Hash:[] as number[]} as Commit} as Repo,
@@ -75,24 +88,7 @@ export const useStore = create<IStore>((set, get) => ({
     reload: 0,
     setReload: () => set(state => ({...state, reload: state.reload + 1})),
     commitSelectModal: null,
-    setCommitSelectModal: (app) => {
-        console.log(app)
-        if (app === "close") return set(state => ({...state, commitSelectModal: {...get().commitSelectModal!, active: false}}))
-        if (typeof app == "string") {
-            return getApp (get, app).then(
-                ({repo, repos}) => set(state => ({...state, repo: {...repo, name: app}, repos, commitSelectModal: {active: true, data: repo.head}}))
-            )
-        }
-        return set(state => ({...state, commitSelectModal: {active: false, data: app}}))
-    },
+    setCommitSelectModal: (app) => handleModal(set, get, app, 'commitSelectModal'),
     autoUpdateModal: {active: false, data: {}},
-    setAutoUpdateModal: (app) => {
-        if (app === "close") return set(state => ({...state, autoUpdateModal: {...get().autoUpdateModal, active: false}}))
-        if (typeof app === "string") {
-            return getApp(get, app).then(
-                ({repo, repos}) => set(state => ({...state, repo: {...repo, name: app}, repos, autoUpdateModal: {active: true, data: {...get().autoUpdateModal.data}}}))
-            )
-        }
-        return set(state => ({...state, autoUpdateModal: {active: false, data: {...get().autoUpdateModal.data, [get().repo.name]: app}}}))
-    }
+    setAutoUpdateModal: (app) => handleModal(set, get, app, 'autoUpdateModal')
 }));

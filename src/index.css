@@ -63,7 +63,7 @@ body {
     border: 1px solid black;
 }
 
-.confirm div {
+.confirm .choice {
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -125,4 +125,11 @@ body {
 
 .login {
     text-align: center;
+}
+
+.log {
+    background: white;
+    font-size: 1rem;
+    font-family: monospace;
+    text-align: left;
 }

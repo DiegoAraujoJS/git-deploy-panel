@@ -1,19 +1,41 @@
 import {useState} from 'react'
 import { useStore } from '../Context/store'
+import axiosInstance from '../utils/client'
+import { url } from '../utils/constants'
 import { checkout } from '../utils/git_actions'
+
+interface Status {
+    Errors: object[]
+    Finished: boolean
+    Moment: string
+    Stdout: string
+}
+
 
 export const VersionChangeModal = () => {
     const [loading, setLoading] = useState(false)
     const [modal, setModal, repo, setReload, setApp] = useStore(state => [state.modal, state.setModal, state.repo, state.setReload, state.setApp])
+
+    const [status, setStatus] = useState<Status | null>(null)
+    const getStatus = (res: {data: number}) => axiosInstance.get<Status>(`${url}/getStatus?ID=${res.data}`).then(response => {
+        if (response.data.Moment !== "Inactive") {
+            setStatus(response.data)
+            return new Promise ((resolve, _) => {
+                setTimeout(() => resolve(getStatus(res)), 500)
+            })
+        }
+        return Promise.resolve()
+    })
     return <div className="confirm" onClick={(e) => e.stopPropagation()}>
         <p>Estás seguro que querés cambiar la versión de {repo.name} a {modal?.Hash.slice(0, 7)}?</p>
-        <div>
+        <div className='choice'>
             <button onClick={() => {
                 setModal(null)
             }}>Cancelar</button>
             <button onClick={() => {
                 setLoading(true)
                 checkout(repo.name, modal!.Hash)
+                    .then(getStatus)
                     .then(() => {
                         setApp(repo.name)
                         setReload()
@@ -26,7 +48,12 @@ export const VersionChangeModal = () => {
                         setLoading(false)
                         setModal(null)
                     })
-            }}>{loading ? `Moviendo versión...` : "Confirmar"}</button>
+            }}>Confirmar</button>
         </div>
+        {status ? 
+        <div className='log'>
+            <p>{status.Moment}</p>
+            <p>{status.Stdout}</p>
+        </div> : null}
     </div>
 }
