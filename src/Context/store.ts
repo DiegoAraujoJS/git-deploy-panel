@@ -31,8 +31,8 @@ export interface VersionChangeEvent {
 }
 
 interface AutoUpdateStatus {
-    seconds: number
-    branch: string
+    Seconds: number
+    Branch: string
 }
 
 type HandleModal<T> = (app: string | T) => void
@@ -57,9 +57,12 @@ const getApp = async (get: () => IStore, app: string, init?: boolean) => {
         repos = await axios.get(`${url}/getRepos`).then(res => res.data.Repos)
     }
     const {data} = await axios.get<Repo>(`${url}/getTags?repo=${init ? repos[0] : app}`)
+    const timers = await axios<{[k: string]: AutoUpdateStatus}>(`${url}/getTimers`)
+    console.log(timers.data)
     return {
         repo: data,
-        repos
+        repos,
+        autoUpdateModal: {active: false, data: timers.data}
     }
 }
 
@@ -80,8 +83,8 @@ export const useStore = create<IStore>((set, get) => ({
     repos: [],
     repo: {name: "",branches: [], commits: [], head: {Hash:[] as number[]} as Commit} as Repo,
     setApp: async (app, init) => {
-        const {repos, repo} = await getApp(get, app, init)
-        set(state => ({...state, repos, repo: {...repo, name: init ? repos[0] : app}, commitSelectModal: {active: !!get().commitSelectModal?.active, data: repo.head}}))
+        const {repos, repo, autoUpdateModal} = await getApp(get, app, init)
+        set(state => ({...state, autoUpdateModal, repos, repo: {...repo, name: init ? repos[0] : app}, commitSelectModal: {active: !!get().commitSelectModal?.active, data: repo.head}}))
     },
     modal: null,
     setModal: (modal) => set(state => ({...state, modal})),

@@ -3,7 +3,7 @@ import {Icon} from "@mdi/react"
 import { useStore } from "../Context/store"
 
  const AppRow = ({ app }: { app: string }) => {
-    const [setApp, setAutoUpdateModal, setCommitSelectModal] = useStore(state => [state.setApp, state.setAutoUpdateModal, state.setCommitSelectModal])
+    const [setApp, setAutoUpdateModal, setCommitSelectModal, autoUpdateModal] = useStore(state => [state.setApp, state.setAutoUpdateModal, state.setCommitSelectModal, state.autoUpdateModal])
     const fetchTags = (e: any) => {
         console.log(e.target)
         e.target.classList.add('loading')
@@ -19,11 +19,16 @@ import { useStore } from "../Context/store"
         <div>
             <div className="action" onClick={() => setCommitSelectModal(app)}>
                 <Icon path={mdiSourceBranch} size={1} />
-                Cambiar de versión
+                Update Manual
             </div>
             <div className="action" onClick={() => setAutoUpdateModal(app)}>
                 <Icon path={mdiAlarm} size={1} />
-                Auto-Update
+                <span>Auto-Update</span>
+                {autoUpdateModal.data[app] ? 
+                <div className="status">
+                    <span><span className="monospace">{autoUpdateModal.data[app]?.Branch}</span> cada </span>
+                    <span><span className="monospace">{autoUpdateModal.data[app]?.Seconds}</span> segundos</span>
+                </div> : null}
             </div>
         </div>
     </div>

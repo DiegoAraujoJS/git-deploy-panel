@@ -27,6 +27,14 @@ body {
     grid-template-columns: 0.5fr 0.90fr 0.3fr 2fr;
 }
 
+.monospace {
+    font-family: monospace;
+}
+
+.error {
+    color: red;
+}
+
 /* Utility Classes */
 
 .update {
@@ -50,7 +58,6 @@ body {
     position: fixed;
     bottom: 50%;
     left: 50%;
-    width: 25vw;
     transform: translate(-50%);
     height: 10vw;
     color: black;
@@ -61,6 +68,7 @@ body {
     text-align: center;
     border-radius: 0.25rem;
     border: 1px solid black;
+    overflow: scroll;
 }
 
 .confirm .choice {
@@ -70,7 +78,7 @@ body {
     align-items: center;
 }
 
-.confirm div button {
+.confirm_button {
     font-family: inherit;
     font-size: inherit;
     margin-right: 0.5rem;
@@ -132,4 +140,14 @@ body {
     font-size: 1rem;
     font-family: monospace;
     text-align: left;
+}
+
+.stderr {
+    color: red
+}
+
+.status {
+    background: lightgreen;
+    display: inline-block;
+    margin-left: 1.5rem;
 }
