@@ -28,11 +28,13 @@ interface Repo {
 export interface VersionChangeEvent {
     Hash: string
     CreatedAt: string
+    Commit: Commit
 }
 
 interface AutoUpdateStatus {
     Seconds: number
     Branch: string
+    Status: number
 }
 
 type HandleModal<T> = (app: string | T) => void
@@ -58,24 +60,22 @@ const getApp = async (get: () => IStore, app: string, init?: boolean) => {
     }
     const {data} = await axios.get<Repo>(`${url}/getTags?repo=${init ? repos[0] : app}`)
     const timers = await axios<{[k: string]: AutoUpdateStatus}>(`${url}/getTimers`)
-    console.log(timers.data)
     return {
         repo: data,
         repos,
-        autoUpdateModal: {active: false, data: timers.data}
+        autoUpdateModal: {active: false, data: timers.data},
     }
 }
 
 const handleModal: <T>(set: (partial: IStore | Partial<IStore> | ((state: IStore) => IStore | Partial<IStore>), replace?: boolean | undefined) => void, get: () => IStore, app: T, modal: 'autoUpdateModal' | 'commitSelectModal') => void = (set, get, app, modal) => {
         const modalValue = get()[modal]
-        if (app === "close") return set(state => ({...state, [modal]: {...modalValue, active: false}}))
+        if (app === "close") {console.log("handle modal first if"); return set(state => ({...state, [modal]: {...modalValue, active: false}}))}
         if (typeof app === "string") {
-            if (app === get().repo.name) return set(state => modalValue ? ({...state, [modal]: {...modalValue, active: true}}) : state)
+            if (app === get().repo.name) {console.log("handle modal third if");return set(state => modalValue ? ({...state, [modal]: {...modalValue, active: true}}) : state)}
             return getApp(get, app).then(
-                ({repo, repos}) => set(state => ({...state, repo: {...repo, name: app}, repos, [modal]: {...modalValue, active: true}}))
+                ({repo, repos}) => set(state => ({...state, repo: {...repo, name: app}, repos, [modal]: {...modalValue, active: true}, commitSelectModal: {active: modal === "commitSelectModal", data: repo.head}}))
             )
         }
-        console.log(app)
         return set(state => ({...state, [modal]: {active: false, data: {...modalValue?.data, ...app,  [get().repo.name]: app}}}))
 }
 

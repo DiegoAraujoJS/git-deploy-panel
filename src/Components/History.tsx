@@ -5,7 +5,6 @@ import { useEffect, useState } from "react"
 import { useStore } from "../Context/store"
 import { VersionChangeEvent } from "../Context/store"
 import { url } from "../utils/constants"
-import { toHexString } from "../utils/conversions"
 import { getDayOfWeek } from "../utils/time"
 import "./History.css"
 
@@ -30,15 +29,14 @@ const History = () => {
                     <p>Hash</p>
                     <p>Mensaje</p>
                     <p id="action_column_name">Acción</p>
-                {history.map(({Hash, CreatedAt}, i) => {
-                    const v = repo.commits?.find(c =>  toHexString(c.commit.Hash as unknown as number[]) === Hash)
+                {history.map(({Hash, CreatedAt, Commit}, i) => {
                     return <div key={i} className="event">
-                        <p>{v?.commit.Committer.Name}</p>
+                        <p>{Commit.Committer.Name}</p>
                         <p>{getDayOfWeek(CreatedAt.split('.')[0])}</p>
                         <p>{Hash.slice(0, 7)}</p>
-                        <p>{v?.commit.Message}</p>
+                        <p>{Commit.Message}</p>
                         <button onClick={() => {
-                            setModal({Hash, CreatedAt})
+                            setModal({Hash, CreatedAt, Commit})
                         }}> Rollback </button>
                     </div>
                 }

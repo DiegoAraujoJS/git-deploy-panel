@@ -25,7 +25,7 @@ import { useStore } from "../Context/store"
                 <Icon path={mdiAlarm} size={1} />
                 <span>Auto-Update</span>
                 {autoUpdateModal.data[app] ? 
-                <div className="status">
+                <div className={autoUpdateModal.data[app].Status === 2 ? "status_error" : "status"}>
                     <span><span className="monospace">{autoUpdateModal.data[app]?.Branch}</span> cada </span>
                     <span><span className="monospace">{autoUpdateModal.data[app]?.Seconds}</span> segundos</span>
                 </div> : null}

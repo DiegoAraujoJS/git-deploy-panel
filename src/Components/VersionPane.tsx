@@ -21,7 +21,7 @@ const VersionPane = () => {
                 {commitSelectModal ? <div>
                     <p>{commitSelectModal.data.Committer?.Name + ", " + getDayOfWeek(commitSelectModal.data.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
                     <p>{commitSelectModal.data.Message}</p>
-                    <div className="action" onClick={() => setModal({Hash: toHexString(commitSelectModal.data.Hash), CreatedAt: commitSelectModal.data.Committer.When})}>
+                    <div className="action" onClick={() => setModal({Hash: toHexString(commitSelectModal.data.Hash), CreatedAt: commitSelectModal.data.Committer.When, Commit: commitSelectModal.data})}>
                         <Icon path={mdiHammer} size={1} />
                         Build y deploy
                     </div>

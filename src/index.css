@@ -35,6 +35,10 @@ body {
     color: red;
 }
 
+.error_background {
+    background: red;
+}
+
 /* Utility Classes */
 
 .update {
@@ -148,6 +152,12 @@ body {
 
 .status {
     background: lightgreen;
+    display: inline-block;
+    margin-left: 1.5rem;
+}
+
+.status_error {
+    background: lightsalmon;
     display: inline-block;
     margin-left: 1.5rem;
 }
