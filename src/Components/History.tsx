@@ -24,15 +24,15 @@ const History = () => {
         <div className="history">
             <h3>Historial de deploys -- {repo.name}</h3>
             <div className="events">
-                    <p>Dev</p>
-                    <p>Fecha</p>
+                    <p>Fecha del Deploy</p>
+                    <p>Dev del Commit</p>
                     <p>Hash</p>
                     <p>Mensaje</p>
                     <p id="action_column_name">Acción</p>
                 {history.map(({Hash, CreatedAt, Commit}, i) => {
                     return <div key={i} className="event">
-                        <p>{Commit.Committer.Name}</p>
                         <p>{getDayOfWeek(CreatedAt.split('.')[0])}</p>
+                        <p>{Commit.Committer.Name}</p>
                         <p>{Hash.slice(0, 7)}</p>
                         <p>{Commit.Message}</p>
                         <button onClick={() => {

@@ -1,6 +1,6 @@
 .events {
     display: grid;
-    grid-template-columns: 0.5fr 0.90fr 0.3fr 2fr 0.5fr;
+    grid-template-columns: 0.90fr 0.5fr 0.3fr 2fr 0.5fr;
     margin-top: 0.25rem;
     text-align: center;
     height: 100%;
