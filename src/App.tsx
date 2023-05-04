@@ -20,9 +20,7 @@ function App() {
     const [updatingRemote, setUpdatingRemote] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     useEffect(() => {
-        if (localStorage.getItem('password') !== null) {
-            setIsAuthenticated(true)
-        }
+        setIsAuthenticated(localStorage.getItem('password') !== null)
         // On the line below we are initializing the app with the first repo in the list
         setApp('', true)
     }, [])
