@@ -9,7 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mdi/js": "^7.1.96",
+    "@iconify/icons-ic": "^1.2.13",
+    "@iconify/icons-tabler": "^1.2.74",
+    "@iconify/react": "^4.1.0",
+    "@mdi/js": "^7.2.96",
     "@mdi/react": "^1.6.1",
     "axios": "^1.2.2",
     "http-server": "^14.1.1",

@@ -1,5 +1,6 @@
-import {  mdiAlarm, mdiSourceBranch } from "@mdi/js"
-import {Icon} from "@mdi/react"
+import roundUpdate from "@iconify/icons-ic/round-update"
+import gitBranch from "@iconify/icons-tabler/git-branch"
+import {Icon} from "@iconify/react"
 import { useStore } from "../Context/store"
 
  const AppRow = ({ app }: { app: string }) => {
@@ -18,11 +19,11 @@ import { useStore } from "../Context/store"
         </div>
         <div>
             <div className="action" onClick={() => setCommitSelectModal(app)}>
-                <Icon path={mdiSourceBranch} size={1} />
+                <Icon icon={gitBranch} height="25" width="25"/>
                 Update
             </div>
             <div className="action" onClick={() => setAutoUpdateModal(app)}>
-                <Icon path={mdiAlarm} size={1} />
+                <Icon icon={roundUpdate} height="25" width="25"/>
                 <span>Auto-Update</span>
                 {autoUpdateModal.data[app] ? 
                 <div className={autoUpdateModal.data[app].Status === 2 ? "status_error" : "status"}>
