@@ -21,7 +21,7 @@ export const VersionChangeModal = () => {
     const getStatus = useCallback((res: {data: number}) => axiosInstance.get<Status>(`${url}/getStatus?ID=${res.data}`).then(response => {
         console.log(response.data)
         setStatus(response.data)
-        if (response.data.Stderr) return "error"
+        if (response.data.Stderr && !response.data.Stderr.match(/npm WARN/)) return "error"
         if (!response.data.Finished) return new Promise ((resolve, _) => {
             setTimeout(() => resolve(getStatus(res)), 500)
         })
