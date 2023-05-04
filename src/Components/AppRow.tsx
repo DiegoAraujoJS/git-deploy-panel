@@ -19,7 +19,7 @@ import { useStore } from "../Context/store"
         <div>
             <div className="action" onClick={() => setCommitSelectModal(app)}>
                 <Icon path={mdiSourceBranch} size={1} />
-                Update Manual
+                Update
             </div>
             <div className="action" onClick={() => setAutoUpdateModal(app)}>
                 <Icon path={mdiAlarm} size={1} />
