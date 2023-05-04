@@ -4,6 +4,7 @@ import { useStore } from "../Context/store";
 import { toHexString } from "../utils/conversions";
 import { getDayOfWeek } from "../utils/time";
 import "./VersionPane.css"
+import "./modal.css"
 import { shallow } from 'zustand/shallow'
 
 const VersionPane = () => {

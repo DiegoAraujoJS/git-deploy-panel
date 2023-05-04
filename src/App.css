@@ -1,0 +1,19 @@
+.login {
+    text-align: center;
+}
+
+.update {
+    margin: auto;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.update:hover {
+    background: lightblue;
+}
+
+.repos {
+    display: grid;
+    gap: 1rem;
+}

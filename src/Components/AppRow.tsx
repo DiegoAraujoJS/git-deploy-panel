@@ -2,6 +2,7 @@ import roundUpdate from "@iconify/icons-ic/round-update"
 import gitBranch from "@iconify/icons-tabler/git-branch"
 import {Icon} from "@iconify/react"
 import { useStore } from "../Context/store"
+import "./modal.css"
 
  const AppRow = ({ app }: { app: string }) => {
     const [setApp, setAutoUpdateModal, setCommitSelectModal, autoUpdateModal] = useStore(state => [state.setApp, state.setAutoUpdateModal, state.setCommitSelectModal, state.autoUpdateModal])

@@ -1,0 +1,87 @@
+.info {
+    font-size: 1.10rem;
+}
+
+.confirm {
+    background: rgb(49,166,209);
+    position: fixed;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    height: 10vw;
+    color: black;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border-radius: 0.25rem;
+    border: 1px solid black;
+    overflow: scroll;
+}
+
+.confirm .choice {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm_button {
+    font-family: inherit;
+    font-size: inherit;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.log {
+    background: white;
+    font-size: 1rem;
+    font-family: monospace;
+    text-align: left;
+}
+
+.options {
+    display: flex;
+    position: relative;
+}
+
+.options div {
+    padding-right: 1rem;
+}
+
+.options div * {
+    padding-right: 0.25rem;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.status {
+    background: lightgreen;
+    display: inline-block;
+    margin-left: 1.5rem;
+}
+
+.status_error {
+    background: lightsalmon;
+    display: inline-block;
+    margin-left: 1.5rem;
+}
+
+.select {
+    width: 80vw;
+    height: 80vh;
+}
+
+.select div {
+    border: 1px solid black;
+}
+
+.select_container {
+    background: mintcream;
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1rem;
+}

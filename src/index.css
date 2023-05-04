@@ -39,125 +39,13 @@ body {
     background: red;
 }
 
-/* Utility Classes */
-
-.update {
-    margin: auto;
-    cursor: pointer;
-    font-size: inherit;
-    font-family: inherit;
-}
-
-.update:hover {
-    background: lightblue;
-}
-
-.repos {
-    display: grid;
-    gap: 1rem;
-}
-
-.confirm {
-    background: rgb(49,166,209);
-    position: fixed;
-    bottom: 50%;
-    left: 50%;
-    transform: translate(-50%);
-    height: 10vw;
-    color: black;
-    font-size: 1.25rem;
-    font-weight: bold;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    border-radius: 0.25rem;
-    border: 1px solid black;
-    overflow: scroll;
-}
-
-.confirm .choice {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.confirm_button {
-    font-family: inherit;
-    font-size: inherit;
-    margin-right: 0.5rem;
-    cursor: pointer;
-}
-
-.select {
-    width: 80vw;
-    height: 80vh;
-}
-
-.select_container {
-    background: mintcream;
-    position: fixed;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 1rem;
-}
-
-.select div {
-    border: 1px solid black;
-}
-
 .modal {
     overflow: scroll;
-}
-
-.options {
-    display: flex;
-    position: relative;
-}
-
-.options div {
-    padding-right: 1rem;
-}
-
-.options div * {
-    padding-right: 0.25rem;
-    font-size: inherit;
-    font-family: inherit;
-}
-
-.close {
-    position: absolute;
-    right: 0;
-}
-
-.close:hover {
-    cursor: default;
-}
-
-.login {
-    text-align: center;
-}
-
-.log {
-    background: white;
-    font-size: 1rem;
-    font-family: monospace;
-    text-align: left;
 }
 
 .stderr {
     color: red
 }
 
-.status {
-    background: lightgreen;
-    display: inline-block;
-    margin-left: 1.5rem;
-}
+/* Utility Classes */
 
-.status_error {
-    background: lightsalmon;
-    display: inline-block;
-    margin-left: 1.5rem;
-}

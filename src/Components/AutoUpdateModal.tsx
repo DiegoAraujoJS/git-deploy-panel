@@ -3,6 +3,7 @@ import { useStore } from "../Context/store"
 import { useForm } from "../hooks/useForm"
 import axiosInstance from "../utils/client"
 import { url } from "../utils/constants"
+import "./modal.css"
 
 export const AutoUpdateModal = () => {
     const [repo, setAutoUpdateModal, setApp, autoUpdateModal] = useStore(state => [state.repo, state.setAutoUpdateModal, state.setApp, state.autoUpdateModal])
@@ -25,7 +26,7 @@ export const AutoUpdateModal = () => {
                     </select>
                 </div> : null}
             </div>
-            <span>La branch <span className="monospace">{branch}</span> se va a re-buildear con el último commit subido cada <span className="monospace">{seconds}</span> segundos</span>
+            <span className="info">Cada <span className="monospace">{seconds}</span> segundos, el repositorio <span className="monospace">{repo.name}</span> se va a re-buildear con el último commit subido a la branch <span className="monospace">{branch}</span> si hay nuevos commits.</span>
             <br/>
             <div>
                 <button className="confirm_button" onClick={() => {

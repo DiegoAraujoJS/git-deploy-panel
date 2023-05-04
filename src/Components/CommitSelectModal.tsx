@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useStore } from "../Context/store"
 import { toHexString } from "../utils/conversions"
 import { getDayOfWeek } from "../utils/time"
+import "./modal.css"
 
 export const CommitSelectModal = () => {
     const [repo, setCommitSelectModal] = useStore(state => [state.repo, state.setCommitSelectModal])

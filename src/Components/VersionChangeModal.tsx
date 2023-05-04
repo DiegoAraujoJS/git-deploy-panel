@@ -3,6 +3,7 @@ import { useStore } from '../Context/store'
 import axiosInstance from '../utils/client'
 import { url } from '../utils/constants'
 import { checkout } from '../utils/git_actions'
+import "./modal.css"
 
 interface Status {
     Errors: object[]
