@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import VersionPane from './Components/VersionPane'
 import AppRow from './Components/AppRow'
 import { url } from './utils/constants'
@@ -9,6 +9,7 @@ import { VersionChangeModal } from './Components/VersionChangeModal'
 import { CommitSelectModal } from './Components/CommitSelectModal'
 import { useStore } from './Context/store'
 import { AutoUpdateModal } from './Components/AutoUpdateModal'
+import { LogModal } from './Components/Log'
 
 type UpdateReposError = {
     Err: string
@@ -16,9 +17,10 @@ type UpdateReposError = {
 }
 
 function App() {
-    const [setApp, repos, modal, commitSelectModal, repo, autoUpdateModal] = useStore(state => [state.setApp, state.repos, state.modal, state.commitSelectModal, state.repo, state.autoUpdateModal])
+    const [setApp, repos, modal, commitSelectModal, repo, autoUpdateModal, logModal] = useStore(state => [state.setApp, state.repos, state.modal, state.commitSelectModal, state.repo, state.autoUpdateModal, state.logModal])
     const [updatingRemote, setUpdatingRemote] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+        console.log("app")
     useEffect(() => {
         setIsAuthenticated(localStorage.getItem('password') !== null)
         // On the line below we are initializing the app with the first repo in the list
@@ -53,6 +55,7 @@ function App() {
             {modal && <VersionChangeModal/>}
             {commitSelectModal?.active && <CommitSelectModal/>}
             {autoUpdateModal.active && <AutoUpdateModal/>}
+            {logModal && <LogModal/>}
         </div>
     )
     return (

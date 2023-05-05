@@ -2,10 +2,12 @@ import roundUpdate from "@iconify/icons-ic/round-update"
 import gitBranch from "@iconify/icons-tabler/git-branch"
 import {Icon} from "@iconify/react"
 import { useStore } from "../Context/store"
+import IconMdi from '@mdi/react';
+import { mdiTextBoxOutline } from '@mdi/js';
 import "./modal.css"
 
  const AppRow = ({ app }: { app: string }) => {
-    const [setApp, setAutoUpdateModal, setCommitSelectModal, autoUpdateModal] = useStore(state => [state.setApp, state.setAutoUpdateModal, state.setCommitSelectModal, state.autoUpdateModal])
+    const [setApp, setAutoUpdateModal, setCommitSelectModal, autoUpdateModal, setLogModal] = useStore(state => [state.setApp, state.setAutoUpdateModal, state.setCommitSelectModal, state.autoUpdateModal, state.setLogModal])
     const fetchTags = (e: any) => {
         console.log(e.target)
         e.target.classList.add('loading')
@@ -27,9 +29,13 @@ import "./modal.css"
                 <Icon icon={roundUpdate} height="25" width="25"/>
                 <span>Auto-Update</span>
                 {autoUpdateModal.data[app] ? 
-                <div className={autoUpdateModal.data[app].Status === 2 ? "status_error" : "status"}>
+                <div className={autoUpdateModal.data[app].Status === 2 ? "status_error" : "status"} >
                     <span><span className="monospace">{autoUpdateModal.data[app]?.Branch}</span> cada </span>
                     <span><span className="monospace">{autoUpdateModal.data[app]?.Seconds}</span> segundos</span>
+                    <div className="log_icon" onClick={(e) => {
+                            e.stopPropagation()
+                            setLogModal(app)
+                        }}><IconMdi path={mdiTextBoxOutline} size={1} /></div>
                 </div> : null}
             </div>
         </div>
