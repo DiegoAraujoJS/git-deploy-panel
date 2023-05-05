@@ -7,6 +7,7 @@ export const LogModal = () => {
     const [status, setStatus] = useState<Status | null>(null)
     const [logModal, setLogModal, setApp] = useStore(state => [state.logModal, state.setLogModal, state.setApp])
     const active = useRef(false)
+    console.log(status)
     const getStatus = useCallback(() => axiosInstance.get<Status>(`${url}/getStatus?ID=${logModal}`).then(response => {
         if (!active.current) return
         setStatus(response.data)
@@ -37,7 +38,7 @@ export const LogModal = () => {
             }}>X</div>
             <div className='log'>
                 <p>Status: {status?.Moment}</p>
-                <p className='stdout'>{status?.Stdout}</p>
+                {status?.Stdout.split('\n').map((line, index) => <p key={index}>{line}</p>)}
                 <p className='stderr'>{status?.Stderr}</p>
             </div>
         </div>
