@@ -31,12 +31,12 @@ export const LogModal = () => {
             })
     }, [])
     return (
-        <div className="confirm">
+        <div className="log">
             <div className="close" onClick={() => {
                 active.current = false
                 setLogModal(null)
             }}>X</div>
-            <div className='log'>
+            <div>
                 <p>Status: {status?.Moment}</p>
                 {status?.Stdout.split('\n').map((line, index) => <p key={index}>{line}</p>)}
                 <p className='stderr'>{status?.Stderr}</p>
