@@ -31,8 +31,7 @@ function App() {
             <button className='update' onClick={() => {
                 setUpdatingRemote(true)
                 axios.get(`${url}/updateRepos`)
-                    .then((res) => {
-                        alert(res.data)
+                    .then(() => {
                         setApp(repo.name)
                         setUpdatingRemote(false)
                     })
