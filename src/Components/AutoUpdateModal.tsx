@@ -32,14 +32,14 @@ export const AutoUpdateModal = () => {
                 <button className="confirm_button" onClick={() => {
                     return axiosInstance.get(`${url}/addTimer?repo=${repo.name}&branch=${branch}&seconds=${seconds}`)
                     .then(() => setApp(repo.name))
-                    .catch((res) => setError(res.response.data))
+                    .catch((res) => setError(res.response.data.error))
                 }}>Aceptar</button>
                 <button className="confirm_button" onClick={() => setAutoUpdateModal("close")}>Cancelar</button>
                 {autoUpdateModal.data[repo.name] ? 
                     <button className="confirm_button" onClick={() => {
                         return axiosInstance.get(`${url}/deleteTimer?repo=${repo.name}`)
                             .then(() => setApp(repo.name))
-                            .catch((res) => setError(res.response.data))
+                            .catch((res) => setError(res.response.data.error))
                     }}>Eliminar</button> : null }
             </div>
             <div className="error">{error}</div>
