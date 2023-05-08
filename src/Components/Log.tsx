@@ -5,7 +5,7 @@ import { url } from "../utils/constants"
 
 export const LogModal = () => {
     const [status, setStatus] = useState<Status | null>(null)
-    const [logModal, setLogModal, setApp] = useStore(state => [state.logModal, state.setLogModal, state.setApp])
+    const [logModal, setLogModal, setApp, setReload] = useStore(state => [state.logModal, state.setLogModal, state.setApp, state.setReload])
     const active = useRef(false)
     console.log(status)
     const getStatus = useCallback(() => axiosInstance.get<Status>(`${url}/getStatus?ID=${logModal}`).then(response => {
@@ -24,6 +24,7 @@ export const LogModal = () => {
                 if (result === "error") return
                 setLogModal(null)
                 setApp("reload")
+                setReload()
             })
             .catch(err => {
                 console.log(err)
