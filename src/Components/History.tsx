@@ -27,7 +27,7 @@ const History = () => {
                     <p>Fecha del Deploy</p>
                     <p>Dev del Commit</p>
                     <p>Hash</p>
-                    <p>Mensaje</p>
+                    <p>Mensaje del Commit</p>
                     <p id="action_column_name">Acción</p>
                 {history.map(({Hash, CreatedAt, Commit}, i) => {
                     return <div key={i} className="event">

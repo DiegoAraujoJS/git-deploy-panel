@@ -7,7 +7,6 @@ import "./modal.css"
  const AppRow = ({ app }: { app: string }) => {
     const [setApp, setAutoUpdateModal, setCommitSelectModal, autoUpdateModal, setLogModal] = useStore(state => [state.setApp, state.setAutoUpdateModal, state.setCommitSelectModal, state.autoUpdateModal, state.setLogModal])
     const fetchTags = (e: any) => {
-        console.log(e.target)
         e.target.classList.add('loading')
         setApp(app)
         e.target.classList.remove('loading')

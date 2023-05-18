@@ -81,7 +81,7 @@ const handleModal: <T>(set: (partial: IStore | Partial<IStore> | ((state: IStore
         if (app === "reload") return getApp(get, get().repo.name).then(payload => set(state => ({...state, ...payload})))
         if (app === "close") return set(state => ({...state, [modal]: {...modalValue, active: false}}))
         if (typeof app === "string") {
-            if (app === get().repo.name) {console.log("handle modal third if");return set(state => modalValue ? ({...state, [modal]: {...modalValue, active: true}}) : state)}
+            if (app === get().repo.name) return set(state => modalValue ? ({...state, [modal]: {...modalValue, active: true}}) : state)
             return getApp(get, app).then(
                 ({repo, repos}) => set(state => ({...state, repo: {...repo, name: app}, repos, [modal]: {...modalValue, active: true}, commitSelectModal: {active: modal === "commitSelectModal", data: repo.head}}))
             )

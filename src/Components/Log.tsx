@@ -7,11 +7,9 @@ export const LogModal = () => {
     const [status, setStatus] = useState<Status | null>(null)
     const [logModal, setLogModal, setApp, setReload] = useStore(state => [state.logModal, state.setLogModal, state.setApp, state.setReload])
     const active = useRef(false)
-    console.log(status)
     const getStatus = useCallback(() => axiosInstance.get<Status>(`${url}/getStatus?ID=${logModal}`).then(response => {
         if (!active.current) return
         setStatus(response.data)
-        if (response.data.Stderr && response.data.Stderr.match(/<nil>/) === null) return "error"
         if (!response.data.Finished) return new Promise ((resolve, _) => {
             setTimeout(() => resolve(getStatus()), 1000)
         })
@@ -20,9 +18,7 @@ export const LogModal = () => {
     useEffect(() => {
         active.current = true
         getStatus()
-            .then((result) => {
-                if (result === "error") return
-                setLogModal(null)
+            .then(() => {
                 setApp("reload")
                 setReload()
             })
