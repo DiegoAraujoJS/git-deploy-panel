@@ -7,12 +7,15 @@ import "./modal.css"
 export const CommitSelectModal = () => {
     const [repo, setCommitSelectModal] = useStore(state => [state.repo, state.setCommitSelectModal])
     const [branch, setBranch] = useState<string | undefined>(undefined)
-    const commits = (branch ? repo.commits.filter(c => c.branches.includes(branch)) : repo.commits).map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c.commit) : null}>
-                            <p>{c.commit.Committer.Name}</p>
-                            <p>{getDayOfWeek(c.commit.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
-                            <p>{toHexString(c.commit.Hash).slice(0, 7)}</p>
-                            <p>{c.commit.Message}</p>
-                        </div>)
+    const [[i, j], setPagination] = useState([0, 30])
+
+    const commits = (branch ? repo.commits.filter(c => c.branches.includes(branch)) : repo.commits).slice(i, j).map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c.commit) : null}>
+        <p>{c.commit.Committer.Name}</p>
+        <p>{getDayOfWeek(c.commit.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
+        <p>{toHexString(c.commit.Hash).slice(0, 7)}</p>
+        <p>{c.commit.Message}</p>
+    </div>)
+
     return (
         <div className="select_container">
             <div className="options">
@@ -37,6 +40,8 @@ export const CommitSelectModal = () => {
                     <p>Hash</p>
                     <p>Mensaje</p>
                     {commits}
+                <button onClick={() => {setPagination([i, j+20])}}>Más</button>
+                <button onClick={() => {setPagination([0, repo.commits.length])}}>Todos</button>
                 </div>
             </div>
         </div>
