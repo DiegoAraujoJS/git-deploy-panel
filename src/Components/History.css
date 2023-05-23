@@ -39,6 +39,10 @@
     cursor: default;
 }
 
+.events .hash {
+    font-family: monospace;
+}
+
 #action_column_name {
     text-align: left
 }

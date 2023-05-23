@@ -33,7 +33,7 @@ const History = () => {
                     return <div key={i} className="event">
                         <p>{getDayOfWeek(CreatedAt.split('.')[0])}</p>
                         <p>{Commit.Committer.Name}</p>
-                        <p>{Hash.slice(0, 7)}</p>
+                        <p className="hash">{Hash.slice(0, 7)}</p>
                         <p>{Commit.Message}</p>
                         <button onClick={() => {
                             setModal({Hash, CreatedAt, Commit})
