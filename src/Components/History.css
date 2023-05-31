@@ -3,9 +3,12 @@
     grid-template-columns: 0.90fr 0.5fr 0.3fr 2fr 0.5fr;
     margin-top: 0.25rem;
     text-align: center;
-    height: 100%;
     border: 1px solid grey;
+    overflow-y: scroll;
+    flex: 1 1 auto;
+    height: 100%;
 }
+
 
 .event {
     display: contents;
@@ -35,7 +38,7 @@
 .event * {
     padding: 0.15rem;
     border: 0.5px solid grey;
-    min-height: 30px;
+    min-height: 2.15rem;
     cursor: default;
 }
 
@@ -47,6 +50,15 @@
     text-align: left
 }
 
+.history {
+    position: absolute;
+    bottom: 0;
+    top: 48%;
+    display: flex;
+    flex-direction: column;
+}
+
 .history h3 {
     text-decoration: underline;
+    flex: 0 1 auto;
 }
