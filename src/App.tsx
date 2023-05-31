@@ -1,4 +1,5 @@
 import './App.css'
+import './Components/Loader.css'
 import { useEffect, useState } from 'react'
 import VersionPane from './Components/VersionPane'
 import AppRow from './Components/AppRow'
@@ -25,6 +26,9 @@ function App() {
         // On the line below we are initializing the app with the first repo in the list
         setApp('', true)
     }, [])
+    if (isAuthenticated && !repos.length) return (
+        <div className="lds-dual-ring"></div>
+    )
     if (isAuthenticated) return (
         <div className='repos'>
             <button className='update' onClick={() => {
