@@ -28,6 +28,8 @@
 
 .app_rows {
     flex:1;
+    height: 100%;
+    overflow: scroll;
 }
 
 .app_row {
@@ -36,7 +38,7 @@
 
 .version_table {
     display: flex;
-    min-height: 30vh;
+    max-height: 40vh;
 }
 
 .action {

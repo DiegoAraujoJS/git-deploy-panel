@@ -1,1 +1,1 @@
-export const url = 'http://test.sistemaslenox.com:3001';
+export const url = import.meta.env.MODE === 'development' ? 'http://localhost:3001' : import.meta.env.VITE_APP_URL;
