@@ -16,7 +16,15 @@ interface Commit {
 
 interface Repo {
     commits: {
-        commit: Commit
+        Name: string
+        Message: string
+        Target: string
+        Committer: {
+            Name: string
+            Email: string
+            When: string
+        }
+        Hash: number[]
         new_reference: string
         branches: string[]
     }[]

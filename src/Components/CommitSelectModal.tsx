@@ -1,20 +1,74 @@
-import { useState } from "react"
+import { Reducer, useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react"
 import { useStore } from "../Context/store"
+import axiosInstance from "../utils/client"
+import { url } from "../utils/constants"
 import { toHexString } from "../utils/conversions"
 import { getDayOfWeek } from "../utils/time"
 import "./modal.css"
 
+type CommitList = {
+    Name: string
+    Message: string
+    Target: string
+    Committer: {
+        Name: string
+        Email: string
+        When: string
+    }
+    Hash: number[]
+    new_reference: string
+    branches: string[]
+}[]
+
+type ActionAdd = {
+    type: "add"
+    payload: CommitList
+}
+
+type ActionAll = {
+    type: "all"
+    payload: CommitList
+}
+
+const reducer = (state: CommitList, action: ActionAdd | ActionAll) => {
+    switch (action.type) {
+        case "add":
+            return [...state, ...action.payload]
+        case "all":
+            return action.payload
+    }
+}
+
 export const CommitSelectModal = () => {
     const [repo, setCommitSelectModal] = useStore(state => [state.repo, state.setCommitSelectModal])
     const [branch, setBranch] = useState<string | undefined>(undefined)
-    const [[i, j], setPagination] = useState([0, 30])
+    const page_jump = useMemo(() => 20, [])
 
-    const commits = (branch ? repo.commits.filter(c => c.branches.includes(branch)) : repo.commits).slice(i, j).map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c.commit) : null}>
-        <p>{c.commit.Committer.Name}</p>
-        <p>{getDayOfWeek(c.commit.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
-        <p className="hash">{toHexString(c.commit.Hash).slice(0, 7)}</p>
-        <p>{c.commit.Message}</p>
+    const [commits, dispatch] = useReducer(reducer, [])
+
+    const commit_elements = (branch ? commits.filter(c => c.branches.includes(branch)) : commits).map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c) : null}>
+        <p>{c.Committer.Name}</p>
+        <p>{getDayOfWeek(c.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
+        <p className="hash">{toHexString(c.Hash).slice(0, 7)}</p>
+        <p>{c.Message}</p>
     </div>)
+
+
+    const initial = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&j=${page_jump}`).then(res => {
+        dispatch({type: "all", payload: res.data})
+    }), [])
+
+    const nextJump = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&i=${commits.length}&j=${commits.length + page_jump}`).then(res => {
+        dispatch({type: "add", payload: res.data})
+    }), [commits])
+
+    const getAll = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}`).then(res => {
+        dispatch({type: "all", payload: res.data})
+    }), [])
+
+    useEffect(() => {
+        initial()
+    }, [repo])
 
     return (
         <div className="select_container">
@@ -39,9 +93,9 @@ export const CommitSelectModal = () => {
                     <p>Fecha</p>
                     <p>Hash</p>
                     <p>Mensaje</p>
-                    {commits}
-                <button onClick={() => {setPagination([i, j+20])}}>Más</button>
-                <button onClick={() => {setPagination([0, repo.commits.length])}}>Todos</button>
+                    {commit_elements}
+                    <button onClick={nextJump}>Más</button>
+                    <button onClick={getAll}>Todos</button>
                 </div>
             </div>
         </div>
