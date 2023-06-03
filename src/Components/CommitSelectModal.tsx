@@ -47,7 +47,7 @@ export const CommitSelectModal = () => {
 
     const [commits, dispatch] = useReducer(reducer, [])
 
-    const commit_elements = (branch ? commits.filter(c => c.branches.includes(branch)) : commits).map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c) : null}>
+    const commit_elements = (branch ? commits.filter(c => {console.log(c.branches);return c.branches.includes(branch)}) : commits).map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c) : null}>
         <p>{c.Committer.Name}</p>
         <p>{getDayOfWeek(c.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
         <p className="hash">{toHexString(c.Hash).slice(0, 7)}</p>
@@ -55,21 +55,21 @@ export const CommitSelectModal = () => {
     </div>)
 
 
-    const initial = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&j=${page_jump}`).then(res => {
+    const initial = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&j=${page_jump}${branch ? "&branch="+branch : ""}`).then(res => {
         dispatch({type: "all", payload: res.data})
-    }), [])
+    }), [branch])
 
-    const nextJump = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&i=${commits.length}&j=${commits.length + page_jump}`).then(res => {
+    const nextJump = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&i=${commits.length}&j=${commits.length + page_jump}${branch ? "&branch="+branch : ""}`).then(res => {
         dispatch({type: "add", payload: res.data})
-    }), [commits])
+    }), [commits, branch])
 
-    const getAll = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}`).then(res => {
+    const getAll = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}${branch ? "&branch="+branch : ""}`).then(res => {
         dispatch({type: "all", payload: res.data})
-    }), [])
+    }), [branch])
 
     useEffect(() => {
         initial().then(() => setLoading(false))
-    }, [repo])
+    }, [repo, branch])
 
     return (
         <div className="select_container">
