@@ -39,6 +39,7 @@
 .version_table {
     display: flex;
     max-height: 40vh;
+    border: 1px solid red;
 }
 
 .action {
