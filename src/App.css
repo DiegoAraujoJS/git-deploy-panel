@@ -2,22 +2,11 @@
     text-align: center;
 }
 
-.update {
-    margin: auto;
-    cursor: pointer;
-    font-size: inherit;
-    font-family: inherit;
-}
-
-.update:hover {
-    background: lightblue;
-}
 
 .repos {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    border: 1px solid black;
     height: 100vh;
     padding: 0.5rem;
 }

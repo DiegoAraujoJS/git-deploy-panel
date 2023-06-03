@@ -1,3 +1,20 @@
+.update_pane {
+    display: flex;
+    flex-direction: column;
+}
+
+.update {
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+    margin: auto;
+    margin-bottom: 0.5rem;
+}
+
+.update:hover {
+    background: lightblue;
+}
+
 .version_pane__select {
     flex-grow: 1;
     position: relative;
@@ -28,7 +45,6 @@
 
 .app_rows {
     flex:1;
-    height: 100%;
     overflow: scroll;
 }
 
@@ -38,8 +54,7 @@
 
 .version_table {
     display: flex;
-    max-height: 40vh;
-    border: 1px solid red;
+    max-height: 50vh;
 }
 
 .action {
