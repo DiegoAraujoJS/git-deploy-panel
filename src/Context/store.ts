@@ -15,19 +15,6 @@ interface Commit {
 }
 
 interface Repo {
-    commits: {
-        Name: string
-        Message: string
-        Target: string
-        Committer: {
-            Name: string
-            Email: string
-            When: string
-        }
-        Hash: number[]
-        new_reference: string
-        branches: string[]
-    }[]
     name: string
     head: Commit
     branches: string[]
@@ -40,6 +27,7 @@ export interface VersionChangeEvent {
 }
 
 interface AutoUpdateStatus {
+    Repo: string
     Seconds: number
     Branch: string
     Status: number
@@ -76,11 +64,11 @@ const getApp = async (get: () => IStore, app: string, init?: boolean) => {
         repos = await axios.get(`${url}/getRepos`).then(res => res.data.Repos)
     }
     const {data} = await axios.get<Repo>(`${url}/getTags?repo=${init ? repos[0] : app}`)
-    const timers = await axios<{[k: string]: AutoUpdateStatus}>(`${url}/getTimers`)
+    const timers = ((await axios.get<AutoUpdateStatus[]>(`${url}/getTimers`)).data || []).reduce((acc, curr) => ({...acc, [curr.Repo]: curr}), {})
     return {
         repo: data,
         repos,
-        autoUpdateModal: {active: false, data: timers.data},
+        autoUpdateModal: {active: false, data: timers},
     }
 }
 

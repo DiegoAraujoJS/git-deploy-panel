@@ -1,4 +1,4 @@
-import { Reducer, useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react"
 import { useStore } from "../Context/store"
 import axiosInstance from "../utils/client"
 import { url } from "../utils/constants"
@@ -43,6 +43,7 @@ export const CommitSelectModal = () => {
     const [repo, setCommitSelectModal] = useStore(state => [state.repo, state.setCommitSelectModal])
     const [branch, setBranch] = useState<string | undefined>(undefined)
     const page_jump = useMemo(() => 20, [])
+    const [loading, setLoading] = useState(true)
 
     const [commits, dispatch] = useReducer(reducer, [])
 
@@ -67,7 +68,7 @@ export const CommitSelectModal = () => {
     }), [])
 
     useEffect(() => {
-        initial()
+        initial().then(() => setLoading(false))
     }, [repo])
 
     return (
@@ -88,6 +89,7 @@ export const CommitSelectModal = () => {
                 <div className="close" onClick={() => setCommitSelectModal("close")}>X</div>
             </div>
             <div className="select" onClick={(e) => e.stopPropagation()}>
+                {loading ? <div className="lds-dual-ring"></div> : 
                 <div className="events modal columns_four">
                     <p>Dev</p>
                     <p>Fecha</p>
@@ -96,7 +98,7 @@ export const CommitSelectModal = () => {
                     {commit_elements}
                     <button onClick={nextJump}>Más</button>
                     <button onClick={getAll}>Todos</button>
-                </div>
+                </div> }
             </div>
         </div>
     )

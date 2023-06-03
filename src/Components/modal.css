@@ -92,10 +92,6 @@
     height: 80vh;
 }
 
-.select div {
-    border: 1px solid black;
-}
-
 .select_container {
     background: mintcream;
     position: fixed;
