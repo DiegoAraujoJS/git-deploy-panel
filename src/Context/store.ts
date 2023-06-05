@@ -61,7 +61,7 @@ interface IStore {
 const getApp = async (get: () => IStore, app: string, init?: boolean) => {
     let repos: string[] = get().repos
     if (init) {
-        repos = await axios.get(`${url}/getRepos`).then(res => res.data.Repos)
+        repos = await axios.get<string[]>(`${url}/getRepos`).then(res => res.data)
     }
     const {data} = await axios.get<Repo>(`${url}/getTags?repo=${init ? repos[0] : app}`)
     const timers = ((await axios.get<AutoUpdateStatus[]>(`${url}/getTimers`)).data || []).reduce((acc, curr) => ({...acc, [curr.Repo]: curr}), {})

@@ -1,24 +1,52 @@
-// Create a History Component. This component will display the history of version changes in time. The component consumes an api endpoint (/repoHistory?repo=${repo.name}) that returns a list of objects of the form {Hash string, CreatedAt string}. The component shows those results.
-
-import axios from "../utils/client"
-import { useEffect, useState } from "react"
+import axiosInstance from "../utils/client"
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react"
 import { useStore } from "../Context/store"
 import { VersionChangeEvent } from "../Context/store"
 import { url } from "../utils/constants"
 import { getDayOfWeek } from "../utils/time"
 import "./History.css"
 
+type CommitList = VersionChangeEvent[]
+
+type ActionAdd = {
+    type: "add"
+    payload: CommitList
+}
+
+type ActionAll = {
+    type: "all"
+    payload: CommitList
+}
+
+const reducer = (state: CommitList, action: ActionAdd | ActionAll) => {
+    switch (action.type) {
+        case "add":
+            return [...state, ...action.payload]
+        case "all":
+            return action.payload
+    }
+}
+
 const History = () => {
     const [repo, reload, setModal] = useStore(state => [state.repo, state.reload, state.setModal])
-    const { name } = repo
-    const [history, setHistory] = useState<VersionChangeEvent[]>([])
+    const [history, dispatch] = useReducer(reducer, [])
+    const page_jump = useMemo(() => 20, [])
+
+    const initial = useCallback(() => axiosInstance(`${url}/repoHistory?repo=${repo.name}&j=${page_jump}`).then(res => {
+        dispatch({type: "all", payload: res.data})
+    }), [repo])
+
+    const nextJump = useCallback(() => axiosInstance(`${url}/repoHistory?repo=${repo.name}&i=${history.length}&j=${history.length + page_jump}`).then(res => {
+        dispatch({type: "add", payload: res.data})
+    }), [repo, history])
+
+    const getAll = useCallback(() => axiosInstance(`${url}/repoHistory?repo=${repo.name}`).then(res => {
+        dispatch({type: "all", payload: res.data})
+    }), [repo])
+
     useEffect(() => {
-        if (name.length) axios.get(`${url}/repoHistory?repo=${name}`)
-            .then(res => {
-                if (res && res.data && Array.isArray(res.data)) setHistory(res.data)
-                else setHistory([])
-            })
-    }, [name, reload])
+        initial()
+    }, [repo, reload])
     // Create a function that will allow you to go back to a previous version of the code.
     return (
         <div className="history">
@@ -41,6 +69,10 @@ const History = () => {
                     </div>
                 }
 )}
+                {history.length ? <div>
+                    <button onClick={nextJump}>Más</button>
+                    <button onClick={getAll}>Todos</button>
+                </div> : null}
             </div>
         </div>
     )

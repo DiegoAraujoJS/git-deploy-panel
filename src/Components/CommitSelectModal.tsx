@@ -68,6 +68,7 @@ export const CommitSelectModal = () => {
     }), [branch])
 
     useEffect(() => {
+        setLoading(true);
         initial().then(() => setLoading(false))
     }, [repo, branch])
 
