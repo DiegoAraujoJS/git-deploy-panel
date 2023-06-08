@@ -1,5 +1,5 @@
 import axiosInstance from "../utils/client"
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react"
+import { useCallback, useEffect, useMemo, useReducer } from "react"
 import { useStore } from "../Context/store"
 import { VersionChangeEvent } from "../Context/store"
 import { url } from "../utils/constants"
@@ -32,15 +32,15 @@ const History = () => {
     const [history, dispatch] = useReducer(reducer, [])
     const page_jump = useMemo(() => 20, [])
 
-    const initial = useCallback(() => axiosInstance(`${url}/repoHistory?repo=${repo.name}&j=${page_jump}`).then(res => {
+    const initial = useCallback(() => axiosInstance<CommitList>(`${url}/repoHistory?repo=${repo.name}&j=${page_jump}`).then(res => {
         dispatch({type: "all", payload: res.data})
     }), [repo])
 
-    const nextJump = useCallback(() => axiosInstance(`${url}/repoHistory?repo=${repo.name}&i=${history.length}&j=${history.length + page_jump}`).then(res => {
+    const nextJump = useCallback(() => axiosInstance<CommitList>(`${url}/repoHistory?repo=${repo.name}&i=${history.length}&j=${history.length + page_jump}`).then(res => {
         dispatch({type: "add", payload: res.data})
     }), [repo, history])
 
-    const getAll = useCallback(() => axiosInstance(`${url}/repoHistory?repo=${repo.name}`).then(res => {
+    const getAll = useCallback(() => axiosInstance<CommitList>(`${url}/repoHistory?repo=${repo.name}`).then(res => {
         dispatch({type: "all", payload: res.data})
     }), [repo])
 

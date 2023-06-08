@@ -17,7 +17,6 @@ type CommitList = {
     }
     Hash: number[]
     new_reference: string
-    branches: string[]
 }[]
 
 type ActionAdd = {
@@ -46,14 +45,6 @@ export const CommitSelectModal = () => {
     const [loading, setLoading] = useState(true)
 
     const [commits, dispatch] = useReducer(reducer, [])
-
-    const commit_elements = (branch ? commits.filter(c => {console.log(c.branches);return c.branches.includes(branch)}) : commits).map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c) : null}>
-        <p>{c.Committer.Name}</p>
-        <p>{getDayOfWeek(c.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
-        <p className="hash">{toHexString(c.Hash).slice(0, 7)}</p>
-        <p>{c.Message}</p>
-    </div>)
-
 
     const initial = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&j=${page_jump}${branch ? "&branch="+branch : ""}`).then(res => {
         dispatch({type: "all", payload: res.data})
@@ -91,15 +82,20 @@ export const CommitSelectModal = () => {
             </div>
             <div className="select" onClick={(e) => e.stopPropagation()}>
                 {loading ? <div className="lds-dual-ring"></div> : 
-                <div className="events modal columns_four">
-                    <p>Dev</p>
-                    <p>Fecha</p>
-                    <p>Hash</p>
-                    <p>Mensaje</p>
-                    {commit_elements}
-                    <button onClick={nextJump}>Más</button>
-                    <button onClick={getAll}>Todos</button>
-                </div> }
+                    <div className="events modal columns_four">
+                        <p>Dev</p>
+                        <p>Fecha</p>
+                        <p>Hash</p>
+                        <p>Mensaje</p>
+                    {commits.map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c) : null}>
+                        <p>{c.Committer.Name}</p>
+                        <p>{getDayOfWeek(c.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
+                        <p className="hash">{toHexString(c.Hash).slice(0, 7)}</p>
+                        <p>{c.Message}</p>
+                    </div>)}
+                        <button onClick={nextJump}>Más</button>
+                        <button onClick={getAll}>Todos</button>
+                    </div> }
             </div>
         </div>
     )
