@@ -7,16 +7,13 @@ import { getDayOfWeek } from "../utils/time"
 import "./modal.css"
 
 type CommitList = {
-    Name: string
+    Hash: number[]
     Message: string
-    Target: string
     Committer: {
         Name: string
         Email: string
         When: string
     }
-    Hash: number[]
-    new_reference: string
 }[]
 
 type ActionAdd = {

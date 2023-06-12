@@ -20,10 +20,10 @@ type ActionAll = {
 
 const reducer = (state: CommitList, action: ActionAdd | ActionAll) => {
     switch (action.type) {
-        case "add":
-            return [...state, ...action.payload]
-        case "all":
-            return action.payload
+    case "add":
+        return [...state, ...action.payload]
+    case "all":
+        return action.payload
     }
 }
 

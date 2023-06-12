@@ -3,15 +3,13 @@ import {create} from 'zustand';
 import { url } from '../utils/constants';
 
 interface Commit {
-    Name: string
+    Hash: number[]
     Message: string
-    Target: string
     Committer: {
         Name: string
         Email: string
         When: string
     }
-    Hash: number[]
 }
 
 interface Repo {

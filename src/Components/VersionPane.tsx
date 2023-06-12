@@ -16,7 +16,7 @@ const VersionPane = () => {
                 <h6>Versión actual: {toHexString(repo?.head?.Hash as unknown as number[]).slice(0, 7)}</h6>
             </div>
             <div className="commit_select">
-                {toHexString(commitSelectModal?.data.Hash).slice(0, 7)}
+                {toHexString(commitSelectModal?.data?.Hash).slice(0, 7)}
             </div>
             <div className="version_pane__select">
                 {commitSelectModal ? <div>
