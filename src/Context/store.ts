@@ -56,13 +56,15 @@ interface IStore {
     setLogModal: (log: string | null) => void
 }
 
+const reduceTimers = (acc: {[k: string]: AutoUpdateStatus}, curr: AutoUpdateStatus) => ({...acc, [curr.Repo]: curr})
+
 const getApp = async (get: () => IStore, app: string, init?: boolean) => {
     let repos: string[] = get().repos
     if (init) {
         repos = await axios.get<string[]>(`${url}/getRepos`).then(res => res.data)
     }
     const {data} = await axios.get<Repo>(`${url}/getTags?repo=${init ? repos[0] : app}`)
-    const timers = ((await axios.get<AutoUpdateStatus[]>(`${url}/getTimers`)).data || []).reduce((acc, curr) => ({...acc, [curr.Repo]: curr}), {})
+    const timers = ((await axios.get<AutoUpdateStatus[]>(`${url}/getTimers`)).data || []).reduce(reduceTimers, {})
     return {
         repo: data,
         repos,
