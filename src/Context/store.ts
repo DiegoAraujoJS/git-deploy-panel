@@ -61,17 +61,12 @@ declare function handleModal (modal: 'autoUpdateModal' | 'commitSelectModal' | '
 
 const reduceTimers = (acc: {[k: string]: AutoUpdateStatus}, curr: AutoUpdateStatus) => ({...acc, [curr.Repo]: curr})
 
-async function getApp (): Promise<any>
-async function getApp (app: string, repos: string[]): Promise<any>
-async function getApp (app?: string, repos?: string[]): Promise<any> {
-    let reps: string[] = []
-    if (!repos) {
-        reps = await axios.get<string[]>(`${url}/getRepos`).then(res => res.data)
-    }
-    const {data} = await axios.get<Repo>(`${url}/getTags?repo=${!repos ? reps[0] : app}`)
+async function getApp (app?: string, repos?: string[]) {
+    let reps: string[] = repos ?? await axios.get<string[]>(`${url}/getRepos`).then(res => res.data)
+    const {data} = await axios.get<{head: Commit, branches: string[]}>(`${url}/getTags?repo=${!repos ? reps[0] : app}`)
     return {
         repo: data,
-        repos,
+        repos: !repos ? reps : repos,
     }
 }
 
@@ -79,14 +74,17 @@ export const useStore = create<Store>((set, get) => ({
     repos: [],
     repo: {name: "",branches: [], commits: [], head: {Hash:[] as number[]} as Commit} as Repo,
     setApp: async (app) => {
-        // First if branch, we handle app initialization.
+        // In the first "if" branch, we handle app initialization.
         if (!app) {
+            // We fetch all repos and set the first one as the default.
             const {repos, repo} = await getApp()
+            // We fetch all timers.
             const timers = ((await axios.get<AutoUpdateStatus[]>(`${url}/getTimers`)).data || []).reduce(reduceTimers, {})
-            return set(state => ({...state, repos, repo, autoUpdateStatus: timers}))
+            // We set the state and default the target commit to the last commit of the default repo.
+            return set(state => ({...state, repos, repo: {...repo, name: repos[0]}, autoUpdateStatus: timers, commitSelectModal: repo.head}))
         }
         const {repos, repo} = await getApp(app, get().repos)
-        set(state => ({...state, repos, repo}))
+        set(state => ({...state, repos, repo: {...repo, name: app}, commitSelectModal: repo.head}))
     },
     modal: null,
     reload: 0,
@@ -99,6 +97,6 @@ export const useStore = create<Store>((set, get) => ({
         if (payload === "close") return set(state => ({...state, [modal]: null}))
         set(state => ({...state, [modal]: payload}))
     },
-    refetch: () => getApp(get().repo.name, get().repos).then(({repo}) => set(state => ({...state, repo}))),
+    refetch: () => getApp(get().repo.name, get().repos).then(({repo}) => set(state => ({...state, repo: {...repo, name: get().repo.name}}))),
     autoUpdateStatus: {},
 }));

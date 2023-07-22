@@ -75,7 +75,10 @@ export const CommitSelectModal = () => {
                         {repo.branches.map((b, i) => <option key={i}>{b}</option>)}
                     </select>
                 </div> : null}
-                <div className="close" onClick={() => handleModal("commitSelectModal", "close")}>X</div>
+                <div className="close" onClick={() => {
+                    // By closing the modal, we leave the repo head as the default selected target commit.
+                    handleModal("commitSelectModal", repo.head)
+                }}>X</div>
             </div>
             <div className="select" onClick={(e) => e.stopPropagation()}>
                 {loading ? <div className="lds-dual-ring"></div> : 
