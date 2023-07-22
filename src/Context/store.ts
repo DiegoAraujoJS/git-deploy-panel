@@ -85,7 +85,7 @@ export const useStore = create<Store>((set, get) => ({
             return
         }
         const {repo} = await getApp(app, get().repos)
-        set(state => ({...state, repo: {...repo, name: app}, ...(defaultCommit ? {commitSelectModal: repo.head} : {})}))
+        set(state => ({...state, repo: {...repo, name: app}, ...(!defaultCommit ? {commitSelectModal: repo.head} : {})}))
     },
     modal: null,
     reload: 0,
@@ -96,7 +96,7 @@ export const useStore = create<Store>((set, get) => ({
     logModal: null,
     handleModal: (modal, payload, app?: string) => {
         if (payload === "close") return set(state => ({...state, [modal]: null}))
-        if (app) get().setApp(app, modal !== "commitSelectModal") // app parameter is required for autoUpdateModal and commitSelectModal. The point is to bring the data of the selected app to the modal.
+        if (app) get().setApp(app, modal === "commitSelectModal") // app parameter is required for autoUpdateModal and commitSelectModal. The point is to bring the data of the selected app to the modal.
         set(state => ({...state, [modal]: payload}))
     },
     refetch: () => getApp(get().repo.name, get().repos).then(({repo}) => set(state => ({...state, repo: {...repo, name: get().repo.name}}))),
