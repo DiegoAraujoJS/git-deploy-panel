@@ -36,7 +36,7 @@ const reducer = (state: CommitList, action: ActionAdd | ActionAll) => {
 }
 
 export const CommitSelectModal = () => {
-    const [repo, setCommitSelectModal] = useStore(state => [state.repo, state.setCommitSelectModal])
+    const [repo, handleModal] = useStore(state => [state.repo, state.handleModal])
     const [branch, setBranch] = useState<string | undefined>(undefined)
     const page_jump = useMemo(() => 20, [])
     const [loading, setLoading] = useState(true)
@@ -75,7 +75,7 @@ export const CommitSelectModal = () => {
                         {repo.branches.map((b, i) => <option key={i}>{b}</option>)}
                     </select>
                 </div> : null}
-                <div className="close" onClick={() => setCommitSelectModal("close")}>X</div>
+                <div className="close" onClick={() => handleModal("commitSelectModal", "close")}>X</div>
             </div>
             <div className="select" onClick={(e) => e.stopPropagation()}>
                 {loading ? <div className="lds-dual-ring"></div> : 
@@ -84,7 +84,7 @@ export const CommitSelectModal = () => {
                         <p>Fecha</p>
                         <p>Hash</p>
                         <p>Mensaje</p>
-                    {commits.map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? setCommitSelectModal(c) : null}>
+                    {commits.map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? handleModal("commitSelectModal", c) : null}>
                         <p>{c.Committer.Name}</p>
                         <p>{getDayOfWeek(c.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
                         <p className="hash">{toHexString(c.Hash).slice(0, 7)}</p>

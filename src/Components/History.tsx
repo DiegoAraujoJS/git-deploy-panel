@@ -28,7 +28,7 @@ const reducer = (state: CommitList, action: ActionAdd | ActionAll) => {
 }
 
 const History = () => {
-    const [repo, reload, setModal] = useStore(state => [state.repo, state.reload, state.setModal])
+    const [repo, reload, setModal] = useStore(state => [state.repo, state.reload, state.handleModal])
     const [history, dispatch] = useReducer(reducer, [])
     const page_jump = useMemo(() => 20, [])
 
@@ -64,7 +64,7 @@ const History = () => {
                         <p className="hash">{Hash.slice(0, 7)}</p>
                         <p>{Commit.Message}</p>
                         <button onClick={() => {
-                            setModal({Hash, CreatedAt, Commit})
+                            setModal("versionChangeModal", {Hash, CreatedAt, Commit})
                         }}> Rollback </button>
                     </div>
                 }

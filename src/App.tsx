@@ -18,13 +18,13 @@ type UpdateReposError = {
 }
 
 function App() {
-    const [setApp, repos, modal, commitSelectModal, repo, autoUpdateModal, logModal] = useStore(state => [state.setApp, state.repos, state.modal, state.commitSelectModal, state.repo, state.autoUpdateModal, state.logModal])
+    const [setApp, repos, modal, commitSelectModal, repo, autoUpdateModal, logModal] = useStore(state => [state.setApp, state.repos, state.logModal, state.commitSelectModal, state.repo, state.autoUpdateModal, state.logModal])
     const [updatingRemote, setUpdatingRemote] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     useEffect(() => {
         setIsAuthenticated(localStorage.getItem('password') !== null)
         // On the line below we are initializing the app with the first repo in the list
-        setApp('', true)
+        setApp()
     }, [])
     if (isAuthenticated && !repos.length) return (
         <div className="lds-dual-ring"></div>
@@ -57,8 +57,8 @@ function App() {
             </div>
             <History/>
             {modal && <VersionChangeModal/>}
-            {commitSelectModal?.active && <CommitSelectModal/>}
-            {autoUpdateModal.active && <AutoUpdateModal/>}
+            {commitSelectModal && <CommitSelectModal/>}
+            {autoUpdateModal && <AutoUpdateModal/>}
             {logModal && <LogModal/>}
         </div>
     )

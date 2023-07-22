@@ -5,7 +5,7 @@ import { url } from "../utils/constants"
 
 export const LogModal = () => {
     const [status, setStatus] = useState<Status | null>(null)
-    const [logModal, setLogModal, setApp, setReload] = useStore(state => [state.logModal, state.setLogModal, state.setApp, state.setReload])
+    const [logModal, handleModal, setApp, setReload] = useStore(state => [state.logModal, state.handleModal, state.setApp, state.setReload])
     const active = useRef(false)
     const getStatus = useCallback(() => axiosInstance.get<Status>(`${url}/getStatus?ID=${logModal}`).then(response => {
         if (!active.current) return
@@ -31,7 +31,7 @@ export const LogModal = () => {
         <div className="log">
             <div className="close" onClick={() => {
                 active.current = false
-                setLogModal(null)
+                handleModal("logModal", "close")
             }}>X</div>
             <div>
                 <p>Status: {status?.Moment}</p>

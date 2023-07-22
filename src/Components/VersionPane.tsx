@@ -8,7 +8,7 @@ import "./modal.css"
 import { shallow } from 'zustand/shallow'
 
 const VersionPane = () => {
-    const [repo, setModal, commitSelectModal] = useStore(state => [state.repo, state.setModal, state.commitSelectModal, state.setCommitSelectModal], shallow)
+    const [repo, handleModal, commitSelectModal] = useStore(state => [state.repo, state.handleModal, state.commitSelectModal], shallow)
     return (
         <div className="version_pane">
             <div>
@@ -16,13 +16,13 @@ const VersionPane = () => {
                 <h6>Versión actual: {toHexString(repo?.head?.Hash as unknown as number[]).slice(0, 7)}</h6>
             </div>
             <div className="commit_select">
-                {toHexString(commitSelectModal?.data?.Hash).slice(0, 7)}
+                {toHexString(commitSelectModal?.Hash).slice(0, 7)}
             </div>
             <div className="version_pane__select">
                 {commitSelectModal ? <div>
-                    <p>{commitSelectModal.data.Committer?.Name + ", " + getDayOfWeek(commitSelectModal.data.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
-                    <p>{commitSelectModal.data.Message}</p>
-                    <div className="action" onClick={() => setModal({Hash: toHexString(commitSelectModal.data.Hash), CreatedAt: commitSelectModal.data.Committer.When, Commit: commitSelectModal.data})}>
+                    <p>{commitSelectModal.Committer?.Name + ", " + getDayOfWeek(commitSelectModal.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
+                    <p>{commitSelectModal.Message}</p>
+                    <div className="action" onClick={() => handleModal("versionChangeModal", {Hash: toHexString(commitSelectModal.Hash), CreatedAt: commitSelectModal.Committer.When, Commit: commitSelectModal})}>
                         <Icon path={mdiHammer} size={1} />
                         Build y deploy
                     </div>
