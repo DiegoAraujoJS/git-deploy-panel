@@ -19,11 +19,11 @@ import "./modal.css"
                 </p>
             </div>
             <div>
-                <div className="action" onClick={() => handleModal("commitSelectModal", null)}>
+                <div className="action" onClick={() => handleModal("commitSelectModal", null, app)}>
                     <Icon icon={gitBranch} height="25" width="25"/>
                     Update
                 </div>
-                <div className="action" onClick={() => autoUpdateStatus[app] && handleModal("autoUpdateModal", autoUpdateStatus[app])}>
+                <div className="action" onClick={() => handleModal("autoUpdateModal", app, app)}>
                     <Icon icon={roundUpdate} height="25" width="25"/>
                     <span>Auto-Update</span>
                     {autoUpdateStatus[app] ? 

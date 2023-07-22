@@ -18,7 +18,7 @@ type UpdateReposError = {
 }
 
 function App() {
-    const [setApp, repos, versionChangeModal, commitSelectModal, repo, autoUpdateModal, logModal] = useStore(state => [state.setApp, state.repos, state.versionChangeModal, state.commitSelectModal, state.repo, state.autoUpdateModal, state.logModal])
+    const [setApp, repos, versionChangeModal, commitSelectModal, repo, autoUpdateModal, logModal, refetch] = useStore(state => [state.setApp, state.repos, state.versionChangeModal, state.commitSelectModal, state.repo, state.autoUpdateModal, state.logModal, state.refetch])
     const [updatingRemote, setUpdatingRemote] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     useEffect(() => {
@@ -36,7 +36,7 @@ function App() {
                     setUpdatingRemote(true)
                     axios.get(`${url}/updateRepos`)
                         .then(() => {
-                            setApp(repo.name)
+                            refetch()
                             setUpdatingRemote(false)
                         })
                         .catch((err) => {

@@ -64,7 +64,7 @@ const History = () => {
                         <p className="hash">{Hash.slice(0, 7)}</p>
                         <p>{Commit.Message}</p>
                         <button onClick={() => {
-                            setModal("versionChangeModal", {Hash, CreatedAt, Commit})
+                            setModal("versionChangeModal", {Hash, CreatedAt, Commit}, repo.name)
                         }}> Rollback </button>
                     </div>
                 }

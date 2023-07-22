@@ -45,17 +45,18 @@ export const CommitSelectModal = () => {
 
     const initial = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&j=${page_jump}${branch ? "&branch="+branch : ""}`).then(res => {
         dispatch({type: "all", payload: res.data})
-    }), [branch])
+    }), [branch, repo])
 
     const nextJump = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}&i=${commits.length}&j=${commits.length + page_jump}${branch ? "&branch="+branch : ""}`).then(res => {
         dispatch({type: "add", payload: res.data})
-    }), [commits, branch])
+    }), [commits, branch, repo])
 
     const getAll = useCallback(() => axiosInstance(`${url}/getCommits?repo=${repo.name}${branch ? "&branch="+branch : ""}`).then(res => {
         dispatch({type: "all", payload: res.data})
-    }), [branch])
+    }), [branch, repo])
 
     useEffect(() => {
+        console.log("commit select modal", repo)
         setLoading(true);
         initial().then(() => setLoading(false))
     }, [repo, branch])
@@ -77,7 +78,7 @@ export const CommitSelectModal = () => {
                 </div> : null}
                 <div className="close" onClick={() => {
                     // By closing the modal, we leave the repo head as the default selected target commit.
-                    handleModal("commitSelectModal", repo.head)
+                    handleModal("commitSelectModal", repo.head, undefined)
                 }}>X</div>
             </div>
             <div className="select" onClick={(e) => e.stopPropagation()}>
@@ -87,7 +88,7 @@ export const CommitSelectModal = () => {
                         <p>Fecha</p>
                         <p>Hash</p>
                         <p>Mensaje</p>
-                    {commits.map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? handleModal("commitSelectModal", c) : null}>
+                    {commits.map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? handleModal("commitSelectModal", c, repo.name) : null}>
                         <p>{c.Committer.Name}</p>
                         <p>{getDayOfWeek(c.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
                         <p className="hash">{toHexString(c.Hash).slice(0, 7)}</p>
