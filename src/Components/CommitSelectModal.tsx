@@ -56,6 +56,7 @@ export const CommitSelectModal = () => {
     }), [branch, repo])
 
     useEffect(() => {
+        if (!repo.name) return
         console.log("commit select modal", repo)
         setLoading(true);
         initial().then(() => setLoading(false))
@@ -88,7 +89,7 @@ export const CommitSelectModal = () => {
                         <p>Fecha</p>
                         <p>Hash</p>
                         <p>Mensaje</p>
-                    {commits.map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? handleModal("commitSelectModal", c, repo.name) : null}>
+                    {commits.map((c, i) => <div key={i} className="event" onClick={(e) => e.detail === 2 ? handleModal("commitSelectModal", c, undefined) : null}>
                         <p>{c.Committer.Name}</p>
                         <p>{getDayOfWeek(c.Committer?.When.match(/\d\d\d\d-\d\d-\d\d|\d\d:\d\d:\d\d/g)?.join(' '))}</p>
                         <p className="hash">{toHexString(c.Hash).slice(0, 7)}</p>

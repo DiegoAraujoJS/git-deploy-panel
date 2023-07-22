@@ -54,7 +54,7 @@ interface Store {
 }
 
 declare function handleModal (modal: 'autoUpdateModal', payload: Store['autoUpdateModal'], app: string): void
-declare function handleModal (modal: 'commitSelectModal', payload: Store['commitSelectModal'], app: string | undefined): void
+declare function handleModal (modal: 'commitSelectModal', payload: Store['commitSelectModal'], app: string | undefined): void // This signature has two functionalities. (null, app) -> we are opening the modal and preventing the handleModal function to set the target commit. (Commit, undefined) -> We close the modal and set its value to Commit
 declare function handleModal (modal: 'versionChangeModal', payload: Store['versionChangeModal'], app: string): void
 declare function handleModal (modal: 'logModal', payload: Store['logModal']): void
 declare function handleModal (modal: 'autoUpdateModal' | 'commitSelectModal' | 'logModal' | 'versionChangeModal', payload: 'close'): void
@@ -70,9 +70,11 @@ async function getApp (app?: string, repos?: string[]) {
     }
 }
 
+const emptyRepo = {name: "",branches: [], commits: [], head: {Hash:[] as number[]} as Commit}
+
 export const useStore = create<Store>((set, get) => ({
     repos: [],
-    repo: {name: "",branches: [], commits: [], head: {Hash:[] as number[]} as Commit} as Repo,
+    repo: {...emptyRepo} as Repo,
     setApp: async (app, defaultCommit) => {
         // In the first "if" branch, we handle app initialization.
         if (!app) {
@@ -85,7 +87,7 @@ export const useStore = create<Store>((set, get) => ({
             return
         }
         const {repo} = await getApp(app, get().repos)
-        set(state => ({...state, repo: {...repo, name: app}, ...(!defaultCommit ? {commitSelectModal: repo.head} : {})}))
+        set(state => ({...state, repo: {...repo, name: app}, ...(defaultCommit ? {commitSelectModal: repo.head} : {})}))
     },
     modal: null,
     reload: 0,
@@ -96,7 +98,10 @@ export const useStore = create<Store>((set, get) => ({
     logModal: null,
     handleModal: (modal, payload, app?: string) => {
         if (payload === "close") return set(state => ({...state, [modal]: null}))
-        if (app) get().setApp(app, modal === "commitSelectModal") // app parameter is required for autoUpdateModal and commitSelectModal. The point is to bring the data of the selected app to the modal.
+        if (app && modal !== "versionChangeModal") {
+            get().setApp(app, modal !== "commitSelectModal") // app parameter is required for autoUpdateModal and commitSelectModal. The point is to bring the data of the selected app to the modal.
+            return set(state => ({...state, [modal]: payload, repo: {...emptyRepo}})) // We pass an empty repo to the modal to prevent the modal from showing the data of the previous app. Then when the setApp call finishes, the repo will be filled with new data.
+        }
         set(state => ({...state, [modal]: payload}))
     },
     refetch: () => getApp(get().repo.name, get().repos).then(({repo}) => set(state => ({...state, repo: {...repo, name: get().repo.name}}))),

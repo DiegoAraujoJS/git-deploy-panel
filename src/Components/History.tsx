@@ -45,6 +45,8 @@ const History = () => {
     }), [repo])
 
     useEffect(() => {
+        if (!repo.name) return
+        console.log("history", repo)
         initial()
     }, [repo, reload])
     // Create a function that will allow you to go back to a previous version of the code.

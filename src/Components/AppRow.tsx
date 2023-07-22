@@ -8,7 +8,7 @@ import "./modal.css"
     const [setApp, handleModal, autoUpdateStatus] = useStore(state => [state.setApp, state.handleModal, state.autoUpdateStatus])
     const fetchTags = (e: any) => {
         e.target.classList.add('loading')
-        setApp(app)
+        setApp(app, true)
         e.target.classList.remove('loading')
     }
     return (
