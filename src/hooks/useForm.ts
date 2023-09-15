@@ -7,6 +7,7 @@ export const useForm = <T>(initial: T) => {
 
     return {
         form,
-        handleChange
+        handleChange, 
+        setForm
     }
 }

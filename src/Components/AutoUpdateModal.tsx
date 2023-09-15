@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useStore } from "../Context/store"
 import { useForm } from "../hooks/useForm"
 import axiosInstance from "../utils/client"
@@ -9,8 +9,11 @@ export const AutoUpdateModal = () => {
     const [repo, handleModal, autoUpdateModal, autoUpdateStatus, refetch] = useStore(state => [state.repo, state.handleModal, state.autoUpdateModal, state.autoUpdateStatus, state.refetch])
     if (!autoUpdateModal) return <div></div>
     const data = autoUpdateStatus[autoUpdateModal]
-    const {form: {branch, seconds}, handleChange} = useForm({branch: data ? data.Branch : repo.branches[0], seconds: data ? data.Seconds : 60})
+    const {form: {branch, seconds}, handleChange, setForm} = useForm({branch: data ? data.Branch : repo.branches[0], seconds: data ? data.Seconds : 60})
     const [error, setError] = useState("")
+    useEffect(() => {
+        setForm({branch: data ? data.Branch : repo.branches[0], seconds: data ? data.Seconds : 60})
+    }, [repo.branches])
     return (
         <div className="select_container">
                 <div>
