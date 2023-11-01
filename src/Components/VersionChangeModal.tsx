@@ -5,7 +5,6 @@ import "./modal.css"
 export const VersionChangeModal = () => {
     const [modal, setModal, repo] = useStore(state => [state.versionChangeModal, state.handleModal, state.repo])
 
-    console.log("versionChangeModal", modal)
     return <div className="confirm" onClick={(e) => e.stopPropagation()}>
         <p>Estás seguro que querés cambiar la versión de {repo.name} a {modal?.Hash.slice(0, 7)}?</p>
         <div className='choice'>

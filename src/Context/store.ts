@@ -83,7 +83,7 @@ export const useStore = create<Store>((set, get) => ({
             // We fetch all timers.
             const timers = ((await axios.get<AutoUpdateStatus[]>(`${url}/getTimers`)).data || []).reduce(reduceTimers, {})
             // We set the state and default the target commit to the last commit of the default repo.
-            set(state => ({...state, repos, repo: {...repo, name: repos[0]}, autoUpdateStatus: timers, commitSelectModal: repo.head}))
+            set(({repos, repo: {...repo, name: repos[0]}, autoUpdateStatus: timers, commitSelectModal: repo.head}))
             return
         }
         const {repo} = await getApp(app, get().repos)

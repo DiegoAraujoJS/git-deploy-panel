@@ -57,7 +57,6 @@ export const CommitSelectModal = () => {
 
     useEffect(() => {
         if (!repo.name) return
-        console.log("commit select modal", repo)
         setLoading(true);
         initial().then(() => setLoading(false))
     }, [repo, branch])

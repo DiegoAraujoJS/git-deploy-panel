@@ -1,5 +1,5 @@
 import axiosInstance from "../utils/client"
-import { useCallback, useEffect, useMemo, useReducer } from "react"
+import { useCallback, useEffect, useReducer } from "react"
 import { useStore } from "../Context/store"
 import { VersionChangeEvent } from "../Context/store"
 import { url } from "../utils/constants"
@@ -27,10 +27,10 @@ const reducer = (state: CommitList, action: ActionAdd | ActionAll) => {
     }
 }
 
+const page_jump = 20
 const History = () => {
     const [repo, reload, setModal] = useStore(state => [state.repo, state.reload, state.handleModal])
     const [history, dispatch] = useReducer(reducer, [])
-    const page_jump = useMemo(() => 20, [])
 
     const initial = useCallback(() => axiosInstance<CommitList>(`${url}/repoHistory?repo=${repo.name}&j=${page_jump}`).then(res => {
         dispatch({type: "all", payload: res.data})
@@ -46,7 +46,6 @@ const History = () => {
 
     useEffect(() => {
         if (!repo.name) return
-        console.log("history", repo)
         initial()
     }, [repo, reload])
     // Create a function that will allow you to go back to a previous version of the code.
