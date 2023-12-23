@@ -8,8 +8,16 @@
 
 body {
     font-family: "Nunito", sans-serif;
-    background: whitesmoke;
+    background: var(--color-background);
     font-size: 1.25rem;
+    color: lightgrey;
+}
+
+:root {
+  --color-alert: #00B7C2;
+  --color-background: #1B262C;
+  --color-primary: #0F4C75;
+  --color-content: #FDCB9E;
 }
 
 /* Utility Classes */
@@ -44,6 +52,16 @@ body {
 
 .stderr {
     color: red
+}
+
+button {
+  background: var(--color-primary);
+  padding: 3px;
+  color: lightgrey
+}
+
+button:hover {
+  color: var(--color-background);
 }
 
 /* Utility Classes */

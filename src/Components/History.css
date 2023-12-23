@@ -3,10 +3,11 @@
     grid-template-columns: 0.90fr 0.5fr 0.3fr 2fr 0.5fr;
     margin-top: 0.25rem;
     text-align: center;
-    border: 1px solid grey;
+    border: 1px solid;
     overflow-y: scroll;
     flex: 1 1 auto;
     height: 100%;
+    border-color: var(--color-alert);
 }
 
 
@@ -32,14 +33,16 @@
 }
 
 .event:hover > * {
-    background-color: lightgrey;
+    background-color: var(--color-alert);
+    color: var(--color-background);
 }
 
 .event * {
     padding: 0.15rem;
-    border: 0.5px solid grey;
+    border: 0.5px solid;
     min-height: 2.15rem;
     cursor: default;
+    border-color: var(--color-alert);
 }
 
 .events .hash {
@@ -54,6 +57,10 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
+}
+
+.history * {
+    border-color: var(--color-alert);
 }
 
 .history h3 {

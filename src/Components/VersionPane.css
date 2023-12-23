@@ -50,6 +50,7 @@
 
 .app_row {
     border-bottom: 1px solid black;
+    border-color: var(--color-alert);
 }
 
 .version_table {
@@ -64,7 +65,7 @@
 }
 
 .action:hover {
-    background: lightblue
+    background: var(--color-primary)
 }
 
 .title {
@@ -76,5 +77,6 @@
     font-size: inherit;
     margin-top: 0.5rem;
     padding: 0 0.5rem;
-    background: lightcoral;
+    color: var(--color-background);
+    background: var(--color-alert);
 }
