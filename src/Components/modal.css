@@ -33,7 +33,8 @@
 }
 
 .log {
-    background: white;
+    background: var(--color-primary);
+    color: var(--color-content);
     width: 50vw;
     position: fixed;
     top: 50%;
